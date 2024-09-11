@@ -1,0 +1,41 @@
+page 90112 "recieving List"
+{
+    ApplicationArea = All;
+    Caption = 'Cars';
+    PageType = List;
+    SourceTable = "Car Recieving Header";
+    UsageCategory = Lists;
+    Editable = false;
+    CardPageId = "Car Receiving Card";
+    layout
+    {
+        area(Content)
+        {
+            repeater(Control1)
+            {
+
+                field(No; Rec.No)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the No field.', Comment = '%';
+                }
+                field(Status; Rec.Status)
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Status field.', Comment = '%';
+                }
+                field("Date"; Rec."Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the  Date field.', Comment = '%';
+                }
+                field("Buying Price"; Rec."Buying Price")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the Buying Price.';
+                    DrillDown = false;
+                }
+            }
+        }
+    }
+}
