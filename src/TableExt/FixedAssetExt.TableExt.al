@@ -10,6 +10,7 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
             DataClassification = ToBeClassified;
             TableRelation = "CAR Make";
         }
+
         field(80501; Model; Text[40])
         {
             Caption = 'Model';
@@ -23,10 +24,10 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
             TableRelation = "Insuarance Company";
 
         }
-        field(80503; RegNo; Text[40])
+        field(80503; RegNo;Code[20])
         {
             Caption = 'Registration Number';
-            DataClassification = ToBeClassified;
+            DataClassification = CustomerContent;
         }
         field(80504; ChassisNo; Text[40])
         {
@@ -42,7 +43,7 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         {
             Caption = 'Country Of First Registration';
             DataClassification = CustomerContent;
-            TableRelation = "CAR Make";
+            TableRelation ="Country/Region";
         }
         field(80507; "Car Insured"; Boolean)
         {
@@ -85,10 +86,11 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
     }
     keys
     {
-        key(KEYSS; RegNo)
+        key(PK;"RegNo","Car Make")
         {
-            // Clustered = true
+            // Clustered = false;
 
         }
+       
     }
 }

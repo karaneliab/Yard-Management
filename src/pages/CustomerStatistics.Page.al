@@ -14,7 +14,7 @@ page 90118 "Customer Statis&tics"
             field("No."; Rec."No")
             {
                 ApplicationArea = All;
-                ToolTip = 'Specifies bonus number.';
+                ToolTip = 'Specifies customer number.';
             }
             field("Buying Price"; Rec."Buying Price")
             {

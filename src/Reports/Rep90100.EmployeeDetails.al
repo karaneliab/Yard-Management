@@ -14,6 +14,7 @@ report 90100 "Employee Details"
     {
         dataitem(Employee; Employee)
         {
+            RequestFilterFields = "No.";
             column(No; "No.")
             {
             }

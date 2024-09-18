@@ -1,10 +1,14 @@
+namespace Microsoft.Sales.Customer;
+using System.Automation;
+using Microsoft.FixedAssets.FixedAsset;
 page 90102 "Car Receiving Card"
 {
     ApplicationArea = All;
     Caption = 'Car Receiving Card';
     PageType = Card;
     SourceTable = "Car Recieving Header";
-    UsageCategory = Documents;
+    // UsageCategory = Documents;
+    PromotedActionCategories = 'Approval';
 
     layout
     {
@@ -16,26 +20,31 @@ page 90102 "Car Receiving Card"
 
                 field(No; Rec.No)
                 {
-                    ToolTip = 'Specifies the value of the No field.', Comment = '%';
+                    ApplicationArea = All;
+                    Importance = Standard;
+                    ToolTip = 'Specifies the number of the customer. The field is either filled automatically from a defined number series, or you enter the number manually because you have enabled manual number entry in the number-series setup.';
+                   
+                }
+                 field("Description";Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
                 field("Date"; Rec."Date")
                 {
                     ToolTip = 'Specifies the value of the  Date field.', Comment = '%';
                 }
+
                 field("Last Released Date"; Rec."Last Released Date")
                 {
                     ToolTip = 'Specifies the value of the Last Released Date field.', Comment = '%';
                 }
-
-                field("Customer no"; Rec."Customer No.")
+                field("Buying Price";Rec."Buying Price")
                 {
-                    Tooltip = 'specifies customer no';
+                    ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
+                    
                 }
-                field("customer Name"; Rec."Customer Name")
-                {
-                    ToolTip = 'Specifies the value of the Customer Name field.';
 
-                }
+           
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
@@ -55,13 +64,7 @@ page 90102 "Car Receiving Card"
             {
                 ApplicationArea = RecordLinks;
             }
-            part("Attached Documents"; "Document Attachment Factbox")
-            {
-                ApplicationArea = All;
-                Caption = 'Attachments';
-                SubPageLink = "Table ID" = const(Database::"Fixed Asset"),
-                              "No." = field("No");
-            }
+         
             part(Statistics; "Customer Statis&tics")
             {
                 SubPageLink = "No" = field("No");
@@ -76,42 +79,172 @@ page 90102 "Car Receiving Card"
     }
     actions
     {
-        area(Navigation)
+       
+        area(processing)
         {
-            action("Customer card")
-            {
-                ApplicationArea = All;
-                Caption = 'CUSTOMER';
-                ToolTip = 'Open Customer card';
-                Image = Customer;
-                RunObject = Page "Customer Card";
-                RunPageLink = "No." = field("Customer No.");
-            }
-            action("Posted Sales Invoice")
-            {
-                ApplicationArea = All;
-                Caption = 'Posted Sales Invoice';
-                ToolTip = 'Open Posted Sales Invoice';
-                Image = "Sales";
-                RunObject = Page "Posted Sales Invoice";
-                RunPageLink = "Sell-to Customer No." = field("Customer No.");
 
+            action("Po&st")
+            {
+                Caption = 'P&ost';
+                Image = PostOrder;
+                trigger OnAction()
+                begin
+                    Rec.PostCarDetails(Rec);
+                    // Message('Car details posted successfully');
+                    if not Confirm('Do you want to post the car receipt', true) then
+                        Message('Not posted')
+                    else
+                        Message('Car details posted successfully');
+                    // exit;     
+                    Page.Run(Page::"Fixed Asset List");
+                end;
+            }
+
+            group("Request Approval")
+            {
+                Caption = 'Request Approval';
+                Image = SendApprovalRequest;
+                
+                action(SendApprovalRequest)
+                {
+                    Caption = 'Send Approval Request';
+                    ToolTip = 'Send an approval request with the specified settings.', Comment = '%';
+                    Image = SendApprovalRequest;
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    Visible = true;
+                    trigger OnAction()
+                    
+                    Var
+                        CustomWorkflowMgmt : Codeunit YardManagement.YardManagement."Custom Workflow Mgmt";
+                        RecRef : RecordRef;
+                    begin
+                        RecRef.GetTable(Rec);
+                        if CustomWorkflowMgmt.CheckApprovalsWorkflowEnabled(RecRef) then
+                            CustomWorkflowMgmt.OnSendWorkflowForApproval(RecRef);
+                        
+                    end;
+
+
+
+                }
+                action(CancelApprovalRequest)
+                {
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Cancel Approval Re&quest';
+                    Image = CancelApprovalRequest;
+                    ToolTip = 'Cancel the approval request.';
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    Visible = true;
+                    trigger OnAction()
+
+                    Var
+                        CustomWorkflowMgmt: Codeunit YardManagement.YardManagement."Custom Workflow Mgmt";
+                        RecRef: RecordRef;
+                    begin
+                        RecRef.GetTable(Rec);
+                       CustomWorkflowMgmt.OnCancelWorkflowForApproval(RecRef);
+
+                    end;
+                }
+            }
+
+        }
+         area(Creation)
+        {
+            group(Approval)
+            {
+                Caption = 'Approval';
+                action(Approve)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Approve';
+                    Image = Approve;
+                    ToolTip = 'Approve the requested changes.';
+                    Promoted = true;
+                    PromotedCategory = New;
+                    Visible = OpenApprovalEntriesExistCurrUser;
+                    trigger OnAction()
+                    begin
+                        ApprovalsMgmt.ApproveRecordApprovalRequest(Rec.RecordId);
+                    end;
+                }
+                action(Reject)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Reject';
+                    Image = Reject;
+                    ToolTip = 'Reject the approval request.';
+                    Visible = OpenApprovalEntriesExistCurrUser;
+                    Promoted = true;
+                    PromotedCategory = New;
+                    trigger OnAction()
+                    begin
+                        ApprovalsMgmt.RejectRecordApprovalRequest(Rec.RecordId);
+                    end;
+                }
+                action(Delegate)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Delegate';
+                    Image = Delegate;
+                    ToolTip = 'Delegate the approval to a substitute approver.';
+                    Visible = OpenApprovalEntriesExistCurrUser;
+                    Promoted = true;
+                    PromotedCategory = New;
+                    trigger OnAction()
+
+                    begin
+                        ApprovalsMgmt.DelegateRecordApprovalRequest(Rec.RecordId);
+                    end;
+                }
+                action(Comment)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Comments';
+                    Image = ViewComments;
+                    ToolTip = 'View or add comments for the record.';
+                    Visible = OpenApprovalEntriesExistCurrUser;
+                    Promoted = true;
+
+                    PromotedCategory = New;
+
+
+                    trigger OnAction()
+                    begin
+                        ApprovalsMgmt.GetApprovalComment(Rec);
+                    end;
+                }
+                action(Approvals)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Approvals';
+                    Image = Approvals;
+                    ToolTip = 'View approval requests.';
+                    Promoted = true;
+                    PromotedCategory = New;
+                    Visible = HasApprovalEntries;
+                    trigger OnAction()
+                    begin
+                        ApprovalsMgmt.OpenApprovalEntriesPage(Rec.RecordId);
+                    end;
+                }
             }
         }
-        area(Processing)
-        {
-            action("Post")
-            {
-                ApplicationArea = All;
-                Caption = 'Post';
-                ToolTip = 'Post the document';
-                Image = Post;
-                Promoted = true;
-                PromotedCategory = Process;
-                RunObject = page "Sales Invoice";
-                RunPageLink = "Sell-to Customer No." = field("Customer No.");
-
-            }
-        }
+        
     }
+    trigger OnAfterGetCurrRecord()
+    begin
+        OpenApprovalEntriesExistCurrUser := ApprovalsMgmt.HasOpenApprovalEntriesForCurrentUser(Rec.RecordId);
+        OpenApprovalEntriesExist := ApprovalsMgmt.HasOpenApprovalEntries(Rec.RecordId);
+        CanCancelApprovalForRecord := ApprovalsMgmt.CanCancelApprovalForRecord(Rec.RecordId);
+        HasApprovalEntries := ApprovalsMgmt.HasApprovalEntries(Rec.RecordId);
+    end;
+    var
+       NoFieldVisible: Boolean;
+       PostCarDetails: Record "Car Line";
+        OpenApprovalEntriesExistCurrUser, OpenApprovalEntriesExist, CanCancelApprovalForRecord
+        , HasApprovalEntries : Boolean;
+        ApprovalsMgmt: Codeunit System.Automation."Approvals Mgmt.";
 }

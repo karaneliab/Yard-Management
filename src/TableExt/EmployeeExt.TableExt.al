@@ -46,8 +46,10 @@ tableextension 90101 "Employee Ext" extends Employee
         field(77894;"Yard Branch";Text[250])
         {
             Caption = 'Yard Branch';
+            CaptionClass = '1,1,1';
             DataClassification = CustomerContent;
-            TableRelation = Dimension;
+            TableRelation =  "Dimension Value".Code where("Global Dimension No." = const(1),
+                                                          Blocked = const(false));
         }
         field(67875;"Passport"; Code[20])
         {

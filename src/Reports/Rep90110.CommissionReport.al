@@ -32,6 +32,14 @@ report 90110 "Commission Report"
             }
 
         }
+        dataitem(CarLine; "Car Line")
+        {
+            RequestFilterFields ="Checked In By";
+            column(Commission_Amount;"Commission Amount")
+            {
+
+            }
+        }
     }
 
 }

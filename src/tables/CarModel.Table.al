@@ -1,6 +1,8 @@
 table 90104 "CAR Model"
 {
     DataClassification = ToBeClassified;
+    DrillDownPageId = "Car Model card";
+    LookupPageId = "Car Model Card";
 
 
     fields

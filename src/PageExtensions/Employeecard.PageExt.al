@@ -18,12 +18,7 @@ pageextension 90100 "Employee card" extends "Employee Card"
                 ToolTip = 'Specifies the Employee NHIF No.', Comment = '%';
 
             }
-            // field(Age;Rec.Age)
-            // {
-            //     ApplicationArea = All;
-            //     Visible = true;
-            //     ToolTip = 'Specifies The Employees age';
-            // }
+
             field("NSSF NO"; Rec."NSSF NO")
             {
                 ApplicationArea = All;

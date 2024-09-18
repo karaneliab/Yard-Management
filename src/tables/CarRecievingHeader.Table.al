@@ -1,7 +1,16 @@
+namespace Microsoft.Sales.Customer;
+
+using System.Automation;
+using Microsoft.Sales.Setup;
+using Microsoft.Purchases.Document;
+using Microsoft.Foundation.NoSeries;
+using Microsoft.FixedAssets.Depreciation;
+using Microsoft.FixedAssets.FixedAsset;
+
 table 90110 "Car Recieving Header"
 {
-    DataClassification = CustomerContent;
-     DrillDownPageId = "recieving List";
+    DataClassification = ToBeClassified;
+    DrillDownPageId = "recieving List";
     LookupPageId = "recieving List";
 
 
@@ -11,43 +20,62 @@ table 90110 "Car Recieving Header"
         {
             Caption = 'No';
             DataClassification = CustomerContent;
-            
+            Editable = false;
+
+            trigger OnLookup()
+            begin
+                TestNoSeries();
+
+            end;
+
         }
-     
+
         field(3; "Date"; Date)
         {
             Caption = 'Date';
             DataClassification = CustomerContent;
 
         }
+        field(7; Description; Text[250])
+        {
+            Caption = 'Car Receiving Description';
+            DataClassification = AccountData;
+            
+
+        }
         field(10; "Buying Price"; Decimal)
         {
             Caption = 'Buying Price';
-            // DataClassification = CustomerContent;
-            FieldClass = FlowField;
-            CalcFormula = lookup("Sales Line"."Unit Price" where("No." = field("Customer No.")));
+            DataClassification = CustomerContent;
+            // FieldClass = FlowField;
+            // // CalcFormula = lookup(Microsoft.Sales.Document."Sales Line"."Unit Price" where("No." = field("Customer Nos.")));
+            // // CalcFormula = lookup(Microsoft.Purchases.Document."Purchase Line".Amount where ("No." = field("Customer Nos.")));
+            // CalcFormula = Sum("Purchase Line"."Direct Unit Cost" where ("No." = field("FA No.")));
+            
 
         }
-         field(2; "Customer No."; Code[20])
+        field(107; "No. Series"; Code[20])
         {
-            Caption = 'Customer No';
-            DataClassification = CustomerContent;
-            TableRelation = Customer;
-            trigger OnValidate()
-            begin
-                TestStatus();
-                CalcFields("Customer Name");
-            end;
+            Caption = 'No. Series';
+            Editable = false;
+            TableRelation = Microsoft.Foundation.NoSeries."No. Series";
         }
+
 
         field(5; "Status"; Enum "Approval Status")
         {
             Caption = 'Status';
             DataClassification = CustomerContent;
+            Editable = false;
             trigger OnValidate()
             begin
                 TestOnRelease();
             end;
+        }
+        field(9; "Customer Nos."; Code[20])
+        {
+            Caption = 'Customer Nos.';
+            TableRelation = Microsoft.Foundation.NoSeries."No. Series";
         }
         field(6; "Last Released Date"; DateTime)
         {
@@ -56,26 +84,22 @@ table 90110 "Car Recieving Header"
             Editable = false;
 
         }
-         field(7; "Customer Name"; Text[100])
+         field(11; "FA No."; Code[20])
         {
-            Caption = ' Customer name';
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = lookup(Customer.Name where("No." = field("Customer No.")));
-
+            Caption = 'Fixed Asset No.';
+            TableRelation = "Fixed Asset";
+        }
     }
 
-    }
-       local procedure TestStatus()
+    local procedure TestStatus()
     begin
         if Status <> Status::"Approved" then
-        exit;
-            // Error(StatusCannotBeReleasedErr, Status);
-        // TestField("Customer No.");
+            exit;
+
         "Last Released Date" := CurrentDateTime;
     end;
 
-     local procedure TestOnRelease()
+    local procedure TestOnRelease()
     begin
         if Status <> Status::Approved then
             exit;
@@ -83,28 +107,140 @@ table 90110 "Car Recieving Header"
         "Last Released Date" := CurrentDateTime;
     end;
 
-    
+    local procedure TestNoSeries()
     var
-        // myInt: Integer;
-    
+        CarReceived: Record "Car Recieving Header";
+        IsHandled: Boolean;
+    begin
+        IsHandled := false;
+        OnBeforeTestNoSeries(Rec, xRec, IsHandled);
+        if IsHandled then
+            exit;
+
+        if "No" <> xRec."No" then
+            if not CarReceived.Get(Rec."No") then begin
+                SalesSetup.Get();
+                NoSeries.TestManual(SalesSetup."Customer Nos.");
+                "No. Series" := '';
+            end;
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeTestNoSeries(var Customer: Record "Car Recieving Header"; xCustomer: Record "Car Recieving Header"; var IsHandled: Boolean)
+    begin
+    end;
+
+
+    var
+
+        SalesSetup: Record "Sales & Receivables Setup";
+        NoSeries: Codeunit Microsoft.Foundation.NoSeries."No. Series";
+
     trigger OnInsert()
     begin
-        
+        SalesSetup.Get();
+        SalesSetup.TestField("Customer Nos.");
+        IF No = '' then
+            No := NoSeries.GetNextNo(SalesSetup."Customer Nos.")
+
     end;
-    
+
     trigger OnModify()
     begin
-        
+
     end;
-    
+
     trigger OnDelete()
     begin
-        
+
     end;
-    
+
     trigger OnRename()
     begin
-        
+
     end;
-    
+
+    procedure PostCarDetails(var Header: Record "Car Recieving Header")
+    var
+        CarHeader: Record "Car Recieving Header";
+        FixedAsset: Record "Fixed Asset";
+        CarLine: Record "Car Line";
+        FADepreciationBook: Record "FA Depreciation Book";
+        ExistingFixedAsset: Record "Fixed Asset";
+        PurchaseLine: Record "Purchase Line";
+
+
+    begin
+        // Posting logic here
+        CarLine.Reset();
+        CarLine.SetRange("Document No.", Header.No);
+        if CarLine.FindSet() then begin
+            repeat
+                if CarLine."Car Make" = '' then
+                    Error('Enter the car make details');
+                if CarLine."Car Model" = '' then
+                    Error('Enter the car model details');
+                if CarLine."Chassis Number" = '' then
+                    Error('Enter the chasis number');
+                if CarLine.RegNo = '' then
+                    Error('Fill in the registration field');
+                if CarLine."Country Of Registration" = '' then
+                    Error('Enter the country of registration ');
+                if CarLine."FA Class Code" = '' then
+                    Error('Enter the Fa class code to get correct subclass with default posting group');
+                ExistingFixedAsset.Reset();
+                ExistingFixedAsset.SetRange(ExistingFixedAsset."RegNo", CarLine.RegNo);
+                if ExistingFixedAsset.FindFirst() then
+                    Error('A car with the registration number %1 already exists.', CarLine.RegNo);
+                FixedAsset.Init();
+                FixedAsset.ChassisNo := CarLine."Chassis Number";
+                FixedAsset."Car Make" := CarLine."Car Make";
+                FixedAsset."Description" := CarLine.RegNo;
+                FixedAsset."Model" := CarLine."Car Model";
+                FixedAsset."RegNo" := CarLine.RegNo;
+                FixedAsset."Year of Manufacture" := CarLine."Year of Make";
+                FixedAsset."Country Of First Registration" := CarLine."Country Of Registration";
+                FixedAsset."FA Location Code" := CarLine.YardBranch;
+                FixedAsset."Insuarance Company" := CarLine."Insurance Company";
+                FixedAsset."FA Class Code" := CarLine."FA Class Code";
+                FixedAsset."Vendor No." := CarLine."Received From";
+                FixedAsset."FA Subclass Code" := CarLine."FA Subclass Code";
+                FixedAsset.Validate("Car Insured",CarLine."Car Insured");
+                FixedAsset.Insert(true);
+                CarLine."FA No" := FixedAsset."No.";
+                 
+                // Header."FA No." := FixedAsset."No.";
+                // Header.Modify(true);
+
+                
+                // PurchaseLine.Reset();
+                // PurchaseLine.SetRange("Document No.", CarLine."Document No.");
+                // PurchaseLine.SetRange("Document No.", CarLine."FA No"); 
+                // if PurchaseLine.FindFirst() then begin
+                //     PurchaseLine."No." := FixedAsset."No.";
+                //     PurchaseLine.Modify(true);
+                //     end;
+                FADepreciationBook.Init();
+                // FADepreciationBook."Depreciation Book Code" := CarLine."Depreciation Book";
+                FADepreciationBook.Validate("Depreciation Book Code",CarLine."Depreciation Book");
+                // FADepreciationBook."Depreciation Starting Date" := CarLine."Depreciation Starting Date";
+                FADepreciationBook.Validate("Depreciation Starting Date",CarLine."Depreciation Starting Date");
+                // FADepreciationBook."Depreciation Ending Date" := CarLine."Depreciation Ending Date";
+                FADepreciationBook.Validate("Depreciation Ending Date",CarLine."Depreciation Ending Date");
+                // FADepreciationBook."No. of Depreciation Years" := CarLine."No of Depreciation Years";
+                FADepreciationBook.Validate("No. of Depreciation Years",CarLine."No of Depreciation Years");
+                // FADepreciationBook."FA Posting Group" := CarLine."FA Posting Group";
+                FADepreciationBook.Validate("FA Posting Group",CarLine."FA Posting Group");
+                // FADepreciationBook."FA No." := CarLine."FA No";
+                FADepreciationBook.Validate("FA No.",CarLine."FA No");
+                FADepreciationBook.Insert(true);
+
+
+            until CarLine.Next() = 0;
+        end;
+
+
+
+    end;
+
 }

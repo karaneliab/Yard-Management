@@ -1,6 +1,7 @@
 namespace YardManagement.YardManagement;
 
 using Microsoft.FixedAssets.FixedAsset;
+using Microsoft.Sales.Customer;
 
 report 90120 "Stock Report"
 {
@@ -25,7 +26,7 @@ report 90120 "Stock Report"
             column(CarInsured; "Car Insured")
             {
             }
-            column(FALocationCode; "FA Location Code")
+            column(ChassisNo;ChassisNo)
             {
             }
         }

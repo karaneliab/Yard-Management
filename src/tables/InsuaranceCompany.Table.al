@@ -72,7 +72,7 @@ table 90103 "Insuarance Company"
 
     keys
     {
-        key(Key1; "No.")
+        key(Key1; "No.","Company Name",Status)
         {
             Clustered = true;
         }

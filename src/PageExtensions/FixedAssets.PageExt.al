@@ -24,8 +24,7 @@ pageextension 90101 "Fixed Assets" extends "Fixed Asset Card"
                     ApplicationArea = ALL;
                     ToolTip = 'Specifies the Insuarance Company.', Comment = '%';
 
-                    // Visible =Rec. "Car Insured"; // Show the field only when "Car Insured" is true
-
+                  
                 }
                 field("RegNo"; Rec.RegNo)
                 {
@@ -49,7 +48,7 @@ pageextension 90101 "Fixed Assets" extends "Fixed Asset Card"
 
                     trigger OnValidate()
                     begin
-                        // If Car Insured is changed, update the page to reflect visibility changes
+                        
                         CurrPage.Update();
                     end;
 

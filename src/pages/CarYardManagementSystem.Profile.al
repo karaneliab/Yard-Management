@@ -1,6 +1,4 @@
 
-
-
 page 90115 "Car Yard Management "
 {
     PageType = RoleCenter;
@@ -92,6 +90,13 @@ page 90115 "Car Yard Management "
                 Tooltip = 'Specifies new purchase invoice', Comment = '%1';
                 RunPageMode = Create;
             }
+            action("SalesInvoice")
+            {
+                RunObject = Page "Sales Invoice List";
+                ApplicationArea = Basic, Suite;
+                Tooltip = 'Specifies new purchase invoice', Comment = '%1';
+                RunPageMode = Create;
+            }
             action("Fixed Assets")
             {
                 ApplicationArea = All;
@@ -102,26 +107,163 @@ page 90115 "Car Yard Management "
         }
         area(Sections)
         {
-            group("Car Yard")
-            {
-                separator(Tasks)
-                {
-                    Caption = 'Tasks';
-                    IsHeader = true;
-                }
-                action("Employees")
-                {
-                    RunObject = Page "Employee List";
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Employees';
-                }
 
+            group("Assets Management")
+            {
+                Caption = 'Assets Management';
                 action("Fixes Assets")
                 {
                     RunObject = Page "Fixed Asset List";
                     ApplicationArea = Basic, Suite;
                     Caption = 'Fixes Assets';
 
+                }
+            }
+            group("Sales Management")
+            {
+                action("Sales Invoce")
+                {
+                    RunObject = Page "Sales Invoice List";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Sales Invoice';
+                    Image = SalesInvoice;
+                    ToolTip = 'View a list of all sales invoices and their status, including the date posted';
+
+                }
+                action("Sales Credit Memo")
+                {
+                    RunObject = Page "Sales Credit Memo";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Sales Credit Memo';
+                    Image = SalesCreditMemo;
+                    ToolTip = 'View a list of all sales credit memos and their status, including thedate posted';
+                }
+                action("Sales Order")
+                {
+                    RunObject = Page "Sales Order";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Sales Order';
+                    ToolTip = 'Defines a list of all sales orders made';
+                }
+
+                action("Posted Sales invoices")
+                {
+                    RunObject = Page "Posted Sales Invoices";
+                    ApplicationArea = All;
+                    Caption = 'Posted Sales Invoices';
+                }
+                action("Customers")
+                {
+                    RunObject = Page "Customer List";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Customers';
+
+                    ToolTip = 'View a list of all customers and their contact information, including addresses, phone';
+                }
+                action("Posted Sales")
+                {
+                    RunObject = Page "Posted Sales Invoice Lines";
+
+                }
+
+            }
+
+            group("Purchase Management")
+            {
+                action(Vendors)
+                {
+                    RunObject = Page "Vendor List";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Vendors';
+
+                }
+
+                action("Purchase Order")
+                {
+                    RunObject = Page "Purchase Order";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Purchase Order';
+                    ToolTip = 'Defines a list of all purchase orders made';
+
+                }
+                group("Receipts")
+                {
+                    action("Car receipt List")
+                    {
+                        RunObject = Page "recieving List";
+                        ApplicationArea = All;
+                        Caption = 'Car receipt List';
+
+                    }
+                    action("Open Receipt List")
+                    {
+                        RunObject = Page "recieving List";
+                        ApplicationArea = Basic,Suite;
+                        Caption = 'Open Receipt List';
+                        RunPageLink = Status =  const(Open);
+                        RunPageMode = View;
+
+                    }
+                    action("Car Receipt List Pending Approval")
+                    {
+                        // RunObject = Page "Posted Purchase Invoices";
+                        ApplicationArea = All;
+                        RunObject = Page "recieving List";
+                        Caption = 'Car Receipt List Pending Approval';
+                        ToolTip = 'Specifes the cars receipt list of Pending Approval';
+                        RunPageLink = Status =  const("Pending Approval");
+                        RunPageMode = View;
+                    }
+                    action("Approved Receipt List")
+                    {
+                        RunObject = Page "recieving List";
+                        ApplicationArea = All;
+                        RunPageLink = Status = Const(Approved);
+                        RunPageMode = View;
+                        Caption = 'Approved Receipt List';
+                        ToolTip = 'Specifies the Approved Receipt list';
+                    }
+
+                    action("Posted Car Receipt List")
+                    {
+                        RunObject = Page "Posted Purchase Invoice Lines";
+                        ApplicationArea = All;
+                         RunPageLink = Type = CONST("Fixed Asset"); 
+                        Caption = 'Posted Car Receipt List';
+                        ToolTip = 'Specifies the Posted car receipt list';
+                    }
+
+
+                }
+
+
+                action("Purchase Invoce")
+                {
+                    RunObject = Page "Purchase Invoices";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Purchase Invoice';
+                    Image = SalesInvoice;
+                    ToolTip = 'View a list of all sales invoices and their status, including the date posted';
+
+                }
+                action("Open Purchase Invoices")
+                {
+                    // RunObject = Page "Posted Purchase Invoices";
+                    Caption = 'Open Purchase Invoices';
+                    ToolTip = 'Specifies theOpen Purchase Invoices';
+                }
+                action("Car Receiving")
+                {
+                    RunObject = Page "Car Receiving Card";
+                    Caption = 'Car Receiving Card';
+                    
+                }
+             
+                action("Posted Purchase Invoices")
+                {
+                    RunObject = Page "Posted Purchase Invoices";
+                    ApplicationArea = All;
+                    Caption = 'Posted Purchase Invoices';
                 }
 
             }
@@ -154,11 +296,7 @@ page 90115 "Car Yard Management "
                         Caption = 'Insuarance company list';
                         ToolTip = 'Specifies the car Insurance company';
                     }
-                    action("Car Receiving")
-                    {
-                        RunObject = Page "Car Receiving Card";
-                        Caption = 'Car Receiving Card';
-                    }
+
                     separator(Action67)
                     {
                     }
@@ -197,88 +335,30 @@ page 90115 "Car Yard Management "
                     action("&FA Locations")
                     {
                         ApplicationArea = FixedAssets;
-                        Caption = '&Fixed Asset Setup';
+                        Caption = '&Fixed Locations';
                         Image = Setup;
                         RunObject = Page "FA Locations";
                         ToolTip = 'Define your accounting policies for fixed assets, such as the allowed posting period and whether to allow posting to main assets. Set up your number series for creating new fixed assets.';
                     }
                 }
             }
-            group("Sales")
+            group("Car Yard")
             {
-                action("Customers")
+                separator(Tasks)
                 {
-                    RunObject = Page "Customer List";
+                    Caption = 'Tasks';
+                    IsHeader = true;
+                }
+
+                action("Employees")
+                {
+                    RunObject = Page "Employee List";
                     ApplicationArea = Basic, Suite;
-                    Caption = 'Customers';
-
-                    ToolTip = 'View a list of all customers and their contact information, including addresses, phone';
-                }
-                action("Sales Invoce")
-                {
-                    RunObject = Page "Sales Invoice List";
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Sales Invoice';
-                    Image = SalesInvoice;
-                    ToolTip = 'View a list of all sales invoices and their status, including the date posted';
-
-                }
-                action("Sales Order")
-                {
-                    RunObject = Page "Sales Order";
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Sales Order';
-                    ToolTip = 'Defines a list of all sales orders made';
-
-
-                }
-                action("Posted Sales")
-                {
-                    RunObject = Page "Posted Sales Invoice Lines";
-
-                }
-                action("Posted Sales invoices")
-                {
-                    RunObject = Page "Posted Sales Invoices";
-                    ApplicationArea = All;
-                    Caption = 'Posted Sales Invoices';
+                    Caption = 'Employees';
                 }
 
             }
-            group(Purchases)
-            {
-                action(Vendors)
-                {
-                    RunObject = Page "Vendor List";
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Vendors';
 
-                }
-                action("Purchase Order")
-                {
-                    RunObject = Page "Purchase Order";
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Purchase Order';
-                    ToolTip = 'Defines a list of all purchase orders made';
-
-
-
-                }
-                action("Posted Purchases")
-                {
-                    RunObject = Page "Posted Purchase Invoice Lines";
-                    ApplicationArea = All;
-                    Caption = 'Posted Purchase Invoice Lines';
-
-                }
-                action("Posted Purchase Invoices")
-                {
-                    RunObject = Page "Posted Purchase Invoices";
-                    ApplicationArea = All;
-                    Caption = 'Posted Purchase Invoices';
-                }
-
-            }
         }
         area(Embedding)
         {
@@ -286,6 +366,7 @@ page 90115 "Car Yard Management "
             {
                 RunObject = Page "FA Locations";
             }
+
         }
     }
 }

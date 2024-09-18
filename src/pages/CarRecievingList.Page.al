@@ -1,9 +1,10 @@
 page 90112 "recieving List"
 {
     ApplicationArea = All;
-    Caption = 'Cars';
+    Caption = 'Cars Receiving List';
     PageType = List;
     SourceTable = "Car Recieving Header";
+    
     UsageCategory = Lists;
     Editable = false;
     CardPageId = "Car Receiving Card";
@@ -28,6 +29,12 @@ page 90112 "recieving List"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the  Date field.', Comment = '%';
+                }
+                field("Description";Rec."Description")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                    
                 }
                 field("Buying Price"; Rec."Buying Price")
                 {
