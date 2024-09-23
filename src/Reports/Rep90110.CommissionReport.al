@@ -7,8 +7,8 @@ report 90110 "Commission Report"
     ApplicationArea = All;
     Caption = 'Commission Report';
     UsageCategory = ReportsAndAnalysis;
-    DefaultLayout = Excel;
-    ExcelLayout  = './src/Cars/CommissionReport.xlsx';
+    RDLCLayout = './src/Reports/CommissionReport.rdl';
+    DefaultLayout = RDLC;
     dataset
     {
         dataitem(Employee; Employee)
@@ -22,6 +22,10 @@ report 90110 "Commission Report"
             column(LastName; "Last Name")
             {
             }
+            column(department; "Yard Branch")
+            {
+                
+            }
             column(Commission; "Comision Paid")
             {
 
@@ -30,16 +34,21 @@ report 90110 "Commission Report"
             {
 
             }
-
-        }
-        dataitem(CarLine; "Car Line")
-        {
-            RequestFilterFields ="Checked In By";
-            column(Commission_Amount;"Commission Amount")
+            dataitem(CarLine; "Car Line")
             {
+               DataItemLink = "Checked In By" = field("No.");
+                DataItemLinkReference= Employee;
 
+
+                RequestFilterFields = "Checked In By";
+                column(Commission_Amount; "Commission Amount")
+                {
+
+                }
             }
+
         }
+    
     }
 
 }

@@ -8,8 +8,8 @@ report 90120 "Stock Report"
     ApplicationArea = All;
     Caption = 'Stock Report';
     UsageCategory = ReportsAndAnalysis;
-    DefaultLayout = Excel;
-    ExcelLayout  = './src/Cars/StockReport.xlsx';
+    RDLCLayout = './src/Reports/StockReport.rdl';
+    DefaultLayout = RDLC;
     dataset
     {
         dataitem(FixedAsset; "Fixed Asset")
@@ -26,21 +26,24 @@ report 90120 "Stock Report"
             column(CarInsured; "Car Insured")
             {
             }
-            column(ChassisNo;ChassisNo)
+            column(ChassisNo; ChassisNo)
             {
+            }
+            dataitem(CarRecievingHeader; "Car Recieving Header")
+            {
+                DataItemLink = "FA No." = field("No.");
+                DataItemLinkReference= FixedAsset;
+                column(Date_Received; Date)
+                {
+
+                }
+                column(Buying_Price; "Buying Price")
+                {
+
+                }
             }
         }
-        dataitem(CarRecievingHeader;"Car Recieving Header")
-        {
-            column(Date_Received;Date)
-            {
 
-            }
-            column(Buying_Price;"Buying Price")
-            {
-
-            }
-        }
     }
     requestpage
     {
@@ -60,4 +63,10 @@ report 90120 "Stock Report"
             }
         }
     }
+    labels
+    {
+        Title = 'Yard Management Stock Report';
+    }
+    var
+        Title: Label 'Stock Report';
 }

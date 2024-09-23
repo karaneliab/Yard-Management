@@ -1,8 +1,10 @@
-namespace YardManagement.YardManagement;
-using System.Automation;
+// naardManagement.YardManagement;
+// using System.Automation;
+// using Microsoft.Sales.Customer;mespace Y
 
 codeunit 90101 "Custom Workflow Mgmt"
 {
+    var
     procedure CheckApprovalsWorkflowEnabled(var RecRef: RecordRef): Boolean
     begin
         if not WorkflowMgt.CanExecuteWorkflow(RecRef, GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, RecRef)) then
@@ -20,25 +22,33 @@ codeunit 90101 "Custom Workflow Mgmt"
     begin
     end;
 
-    procedure GetWorkflowCode(WorkflowCode: code[128]; RecRef: RecordRef): Code[128]
+    procedure GetWorkflowCode(WorkflowCode: code[128]; TableName: Text): Code[128]
     begin
-        exit(DelChr(StrSubstNo(WorkflowCode, RecRef.Name), '=', ' '));
+        exit(DelChr(StrSubstNo(WorkflowCode, TableName, '=', ' ')));
     end;
 
-    //  add events to library
+    procedure GetWorkflowCode(WorkflowCode: code[128]; RecRef: RecordRef): Code[128]
+    begin
+        exit(DelChr(StrSubstNo(WorkflowCode, RecRef.Name, '=', ' ')));
+    end;
+   
+
+    // !add events to library
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Event Handling", OnAddWorkflowEventsToLibrary, '', false, false)]
     local procedure OnAddWorkflowEventsToLibrary()
     var
-        RecRef: RecordRef;
         WorkflowEventHandling: Codeunit "Workflow Event Handling";
+        CarReceivHeader: Record "Car Recieving Header";
     begin
-        WorkflowEventHandling.AddEventToLibrary(GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, RecRef), DATABASE::Microsoft.Sales.Customer."Car Recieving Header",
-         GetWorkflowEventDesc(WorkflowSendForApprovalEventDescTxt, RecRef), 0, false);
-        WorkflowEventHandling.AddEventToLibrary(GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, RecRef), DATABASE::Microsoft.Sales.Customer."Car Recieving Header",
-          GetWorkflowEventDesc(WorkflowCancelForApprovalEventDescTxt, RecRef), 0, false);
+        WorkflowEventHandling.AddEventToLibrary(GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, CarReceivHeader.TableName), DATABASE::"Car Recieving Header",
+        //? WorkflowSendForApprovalEventDescTxt,0,FALSE);
+
+         GetWorkflowEventDesc(WorkflowSendForApprovalEventDescTxt, CarReceivHeader.TableName), 0, FALSE);
+        WorkflowEventHandling.AddEventToLibrary(GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, CarReceivHeader.TableName), DATABASE::"Car Recieving Header",
+          GetWorkflowEventDesc(WorkflowCancelForApprovalEventDescTxt,CarReceivHeader.TableName), 0, FALSE);
     end;
 
-    // subscribe
+    //! subscribe
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Custom Workflow Mgmt", OnSendWorkflowForApproval, '', false, false)]
     local procedure RunWorkflowOnSendWorkflowForApproval(var RecRef: RecordRef)
@@ -53,43 +63,46 @@ codeunit 90101 "Custom Workflow Mgmt"
     end;
 
 
-
     procedure GetWorkflowEventDesc(WorkflowEventDesc: Text; RecRef: RecordRef): Text
     begin
         exit(StrSubstNo(WorkflowEventDesc, RecRef.Name));
 
+    end;
+    procedure GetWorkflowEventDesc(WorkflowEventDesc: Text; TableName: Text): Text
+    begin
+        exit(StrSubstNo(WorkflowEventDesc, TableName));
 
     end;
 
-    //  handle document
+    //!  handle document
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Response Handling", OnOpenDocument, '', false, false)]
     local procedure OnOpenDocument(RecRef: RecordRef; var Handled: Boolean)
     var
-        CustomWorkflowHdr: Record Microsoft.Sales.Customer."Car Recieving Header";
+        CarReceivingHeader: Record "Car Recieving Header";
     begin
         case RecRef.Number of
-            Database::Microsoft.Sales.Customer."Car Recieving Header":
+            Database::"Car Recieving Header":
                 begin
-                    RecRef.SetTable(CustomWorkflowHdr);
-                    CustomWorkflowHdr.Validate(Status, CustomWorkflowHdr.Status::Open);
-                    CustomWorkflowHdr.Modify(true);
+                    RecRef.SetTable(CarReceivingHeader);
+                    CarReceivingHeader.Validate(Status, CarReceivingHeader.Status::Created);
+                    CarReceivingHeader.Modify(true);
                     Handled := true;
                 end;
         end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", OnSetStatusToPendingApproval, '', false, false)]
-    local procedure OnSetStatusToPendingApproval(RecRef: RecordRef; var Variant: Variant; var IsHandled: Boolean)
+    local procedure OnSetStatusToPendingApproval( RecRef: RecordRef; var Variant: Variant; var IsHandled: Boolean)
     var
-        CustomWorkflowHdr: Record Microsoft.Sales.Customer."Car Recieving Header";
+        CarReceivingHeader: Record "Car Recieving Header";
     begin
         case RecRef.Number of
-            Database::Microsoft.Sales.Customer."Car Recieving Header":
+            Database::"Car Recieving Header":
                 begin
-                    RecRef.SetTable(CustomWorkflowHdr);
-                    CustomWorkflowHdr.Validate(Status, CustomWorkflowHdr.Status::"Pending Approval");
-                    CustomWorkflowHdr.Modify(true);
-                    Variant := CustomWorkflowHdr;
+                    RecRef.SetTable(CarReceivingHeader);
+                    CarReceivingHeader.Validate(Status, CarReceivingHeader.Status::"Pending Approval");
+                    CarReceivingHeader.Modify(true);
+                    Variant := CarReceivingHeader;
                     IsHandled := true;
                 end;
         end;
@@ -98,14 +111,13 @@ codeunit 90101 "Custom Workflow Mgmt"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Approvals Mgmt.", OnPopulateApprovalEntryArgument, '', false, false)]
     local procedure OnPopulateApprovalEntryArgument(var RecRef: RecordRef; var ApprovalEntryArgument: Record "Approval Entry"; WorkflowStepInstance: Record "Workflow Step Instance")
     var
-        CustomWorkflowHdr: Record Microsoft.Sales.Customer."Car Recieving Header";
+        CarReceivingHeader: Record "Car Recieving Header";
     begin
         case RecRef.Number of
-            Database::Microsoft.Sales.Customer."Car Recieving Header":
+            Database::"Car Recieving Header":
                 begin
-                    ;
-                    RecRef.SetTable(CustomWorkflowHdr);
-                    ApprovalEntryArgument."Document No." := CustomWorkflowHdr."No";
+                    RecRef.SetTable(CarReceivingHeader);
+                    ApprovalEntryArgument."Document No." := CarReceivingHeader."No";
                 end;
         end;
     end;
@@ -113,14 +125,14 @@ codeunit 90101 "Custom Workflow Mgmt"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Response Handling", OnReleaseDocument, '', false, false)]
     local procedure OnReleaseDocument(RecRef: RecordRef; var Handled: Boolean)
     var
-        CustomWorkflowHdr: Record Microsoft.Sales.Customer."Car Recieving Header";
+        CarReceivingHeader: Record "Car Recieving Header";
     begin
         case RecRef.Number of
-            Database::Microsoft.Sales.Customer."Car Recieving Header":
+            Database::"Car Recieving Header":
                 begin
-                    RecRef.SetTable(CustomWorkflowHdr);
-                    CustomWorkflowHdr.Validate(Status, CustomWorkflowHdr.Status::Approved);
-                    CustomWorkflowHdr.Modify(true);
+                    RecRef.SetTable(CarReceivingHeader);
+                    CarReceivingHeader.Validate(Status, CarReceivingHeader.Status::Approved);
+                    CarReceivingHeader.Modify(true);
                     Handled := true;
                 end;
         end;
@@ -131,41 +143,43 @@ codeunit 90101 "Custom Workflow Mgmt"
     local procedure OnRejectApprovalRequest(var ApprovalEntry: Record "Approval Entry")
     var
         RecRef: RecordRef;
-        CustomWorkflowHdr: Record Microsoft.Sales.Customer."Car Recieving Header";
-        v: Codeunit "Record Restriction Mgt.";
+        CarReceivingHeader: Record "Car Recieving Header";
+    // v: Codeunit "Record Restriction Mgt.";
     begin
-        case ApprovalEntry."Table ID" of
-            Database::Microsoft.Sales.Customer."Car Recieving Header":
+        RecRef.Get(ApprovalEntry."Record ID to Approve");
+        case RecRef.Number of
+            Database::"Car Recieving Header":
                 begin
-                    if CustomWorkflowHdr.Get(ApprovalEntry."Document No.") then begin
-                        CustomWorkflowHdr.Validate(CustomWorkflowHdr.Status, CustomWorkflowHdr.Status::Rejected);
-                        CustomWorkflowHdr.Modify(true)
+                    RecRef.SetTable(CarReceivingHeader);
+                    if CarReceivingHeader.Get(ApprovalEntry."Document No.") then begin
+                        CarReceivingHeader.Validate(CarReceivingHeader.Status, CarReceivingHeader.Status::Rejected);
+                        CarReceivingHeader.Modify(true)
                     end;
                 end;
         end;
 
     end;
 
-// subsibe to event predecessor
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Event Handling", OnAddWorkflowEventPredecessorsToLibrary, '', false, false)]
+    //! subsibe to event predecessor
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Event Handling", 'OnAddWorkflowEventPredecessorsToLibrary', '', false, false)]
     local procedure OnAddWorkflowEventPredecessorsToLibrary(EventFunctionName: Code[128])
     var
         RecRef: RecordRef;
+        CarReceivHeader: Record "Car Recieving Header";
+  
     begin
         case EventFunctionName of
-            GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, RecRef):
+            GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, CarReceivHeader.TableName):
                 begin
-                    WorkflowEventhandling.AddEventPredecessor(EventFunctionName, GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, RecRef));
-                end;
-            GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, RecRef):
+                    WorkflowEventHandling.AddEventPredecessor(GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, CarReceivHeader.TableName), GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, CarReceivHeader.TableName));
+                END;
+            GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, CarReceivHeader.TableName):
                 begin
-                    WorkflowEventHandling.AddEventPredecessor(EventFunctionName, GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, RecRef));
-                end;
-            else
-                Error('Unexpected EventFunctionName: %1', EventFunctionName);
+                    WorkflowEventhandling.AddEventPredecessor(GetWorkflowCode(RUNWORKFLOWONCANCELFORAPPROVALCODE, CarReceivHeader.TableName), GetWorkflowCode(RUNWORKFLOWONSENDFORAPPROVALCODE, CarReceivHeader.TableName));
 
+                end;
         end;
-
     end;
 
     var
@@ -176,5 +190,7 @@ codeunit 90101 "Custom Workflow Mgmt"
         NoWorkflowEnabledErr: Label 'No approval workflow for this record type is enabled.';
         WorkflowSendForApprovalEventDescTxt: Label 'Approval of Car Receiving Header is requested.';
         WorkflowCancelForApprovalEventDescTxt: Label 'Approval of a  Car Receiving Header is cancelled.';
+
+
 
 }

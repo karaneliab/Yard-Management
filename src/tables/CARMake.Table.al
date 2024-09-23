@@ -29,14 +29,7 @@ table 90100 "CAR Make"
     }
 
 
-    fieldgroups
-    {
-        // Add changes to field groups here
-    }
-
-    // var
-    //     myInt: Integer;
-
+   
     trigger OnInsert()
     begin
 

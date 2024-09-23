@@ -88,7 +88,7 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
     {
         key(PK;"RegNo","Car Make")
         {
-            // Clustered = false;
+           
 
         }
        

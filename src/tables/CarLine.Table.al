@@ -21,7 +21,7 @@ table 90111 "Car Line"
         {
             DataClassification = CustomerContent;
             Caption = 'Checked in by.';
-            TableRelation = Employee;
+            TableRelation = Employee where ("Yard Branch"=field(YardBranch));
             
 
         }
@@ -250,7 +250,7 @@ table 90111 "Car Line"
     
 
     var
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        
         ProdOrderLine: Record "Prod. Order Line";
         Text022: Label 'Do you want to change %1?';
         GLSetup: Record "General Ledger Setup";

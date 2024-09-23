@@ -13,7 +13,6 @@ table 90110 "Car Recieving Header"
     DrillDownPageId = "recieving List";
     LookupPageId = "recieving List";
 
-
     fields
     {
         field(1; No; Code[20])
@@ -209,29 +208,13 @@ table 90110 "Car Recieving Header"
                 FixedAsset.Insert(true);
                 CarLine."FA No" := FixedAsset."No.";
                  
-                // Header."FA No." := FixedAsset."No.";
-                // Header.Modify(true);
-
-                
-                // PurchaseLine.Reset();
-                // PurchaseLine.SetRange("Document No.", CarLine."Document No.");
-                // PurchaseLine.SetRange("Document No.", CarLine."FA No"); 
-                // if PurchaseLine.FindFirst() then begin
-                //     PurchaseLine."No." := FixedAsset."No.";
-                //     PurchaseLine.Modify(true);
-                //     end;
+               
                 FADepreciationBook.Init();
-                // FADepreciationBook."Depreciation Book Code" := CarLine."Depreciation Book";
                 FADepreciationBook.Validate("Depreciation Book Code",CarLine."Depreciation Book");
-                // FADepreciationBook."Depreciation Starting Date" := CarLine."Depreciation Starting Date";
                 FADepreciationBook.Validate("Depreciation Starting Date",CarLine."Depreciation Starting Date");
-                // FADepreciationBook."Depreciation Ending Date" := CarLine."Depreciation Ending Date";
                 FADepreciationBook.Validate("Depreciation Ending Date",CarLine."Depreciation Ending Date");
-                // FADepreciationBook."No. of Depreciation Years" := CarLine."No of Depreciation Years";
                 FADepreciationBook.Validate("No. of Depreciation Years",CarLine."No of Depreciation Years");
-                // FADepreciationBook."FA Posting Group" := CarLine."FA Posting Group";
                 FADepreciationBook.Validate("FA Posting Group",CarLine."FA Posting Group");
-                // FADepreciationBook."FA No." := CarLine."FA No";
                 FADepreciationBook.Validate("FA No.",CarLine."FA No");
                 FADepreciationBook.Insert(true);
 
@@ -242,5 +225,31 @@ table 90110 "Car Recieving Header"
 
 
     end;
+    //  procedure CommisionCalculate(var Header: Record "Car Recieving Header")
+    // var
+    //     CarReceivingHeader: Record "Car Recieving Header";
+    //     CommissionRate: Decimal;
+    //     CarLine: Record "Car Line";
+    //     CarMakeCommission: Record "Commission Rate";
+    //     BuyingPrice: Decimal;
+    // begin
+    //     CarLine.Reset();
+    //     if CarReceivingHeader.Get(Rec.CarReceivingHeader."Document No.") then begin
+    //         BuyingPrice := CarReceivingHeader."Buying Price";
+
+            
+    //         if CarMakeCommission.Get(Rec."Car Make") then begin
+    //             CommissionRate := CarMakeCommission."Commission Rate";
+
+                
+    //             CarLine."Commission Amount" := CalculateCommissionAmount(CommissionRate, BuyingPrice);
+    //         end;
+    //     end;
+    // end;
+
+    // procedure CalculateCommissionAmount(CommissionRate: Decimal; BuyingPrice: Decimal): Decimal
+    // begin
+    //     exit((BuyingPrice * CommissionRate) / 100); 
+    // end;
 
 }

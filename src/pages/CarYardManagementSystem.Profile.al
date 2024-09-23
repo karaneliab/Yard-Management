@@ -285,11 +285,7 @@ page 90115 "Car Yard Management "
                         Caption = 'Car Make';
                         ApplicationArea = All;
                     }
-                    separator("Ta&ks")
-                    {
-                        Caption = 'Tasks';
-                        IsHeader = true;
-                    }
+                    
                     action("Insuarance Company")
                     {
                         RunObject = Page "Insuarance Company List";
@@ -297,9 +293,7 @@ page 90115 "Car Yard Management "
                         ToolTip = 'Specifies the car Insurance company';
                     }
 
-                    separator(Action67)
-                    {
-                    }
+                   
                     action("General &Ledger Setup")
                     {
                         ApplicationArea = Basic, Suite;
@@ -342,32 +336,25 @@ page 90115 "Car Yard Management "
                     }
                 }
             }
-            group("Car Yard")
+            group("Yard Employees")
             {
-                separator(Tasks)
-                {
-                    Caption = 'Tasks';
-                    IsHeader = true;
-                }
-
                 action("Employees")
                 {
                     RunObject = Page "Employee List";
                     ApplicationArea = Basic, Suite;
                     Caption = 'Employees';
                 }
+                action("Employee Report")
+                {
+                    RunObject = report  "Employee Details";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Employee Report';
+                }
 
             }
 
         }
-        area(Embedding)
-        {
-            action("FA Locations")
-            {
-                RunObject = Page "FA Locations";
-            }
-
-        }
+   
     }
 }
 profile "Car Yard Management System"

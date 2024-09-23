@@ -7,8 +7,10 @@ report 90100 "Employee Details"
     ApplicationArea = All;
     Caption = 'Employee Details';
     UsageCategory = ReportsAndAnalysis;
-    DefaultLayout = Excel;
-    ExcelLayout  = './src/Cars/EmployeeDetails.xlsx';
+    // DefaultLayout = Excel;
+    // ExcelLayout  = './src/Cars/EmployeeDetails.xlsx';
+    RDLCLayout = './src/Reports/EmployeeDetails.rdl';
+    DefaultLayout = RDLC;
     
     dataset
     {
@@ -39,6 +41,10 @@ report 90100 "Employee Details"
             }
             column(BasicPay; "Basic Pay")
             {
+            }
+            column(Image;Image)
+            {
+                
             }
             column(age; AgeCalc.CalculateAge(Today, "Birth Date"))
             {
