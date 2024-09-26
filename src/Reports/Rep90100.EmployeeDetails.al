@@ -7,11 +7,8 @@ report 90100 "Employee Details"
     ApplicationArea = All;
     Caption = 'Employee Details';
     UsageCategory = ReportsAndAnalysis;
-    // DefaultLayout = Excel;
-    // ExcelLayout  = './src/Cars/EmployeeDetails.xlsx';
     RDLCLayout = './src/Reports/EmployeeDetails.rdl';
     DefaultLayout = RDLC;
-    
     dataset
     {
         dataitem(Employee; Employee)
@@ -23,15 +20,23 @@ report 90100 "Employee Details"
             column(FirstName; "First Name")
             {
             }
-            column(BirthDate; "Birth Date")
+            column(Date_of_Birth; "Birth Date")
             {
             }
-            column(Status;Status)
+            column(ID_Number; "ID Number")
+            {
+
+            }
+            column(Status; Status)
             {
 
             }
             column(LastDateModified; "Last Date Modified")
             {
+            }
+            column(Yard_Branch; "Yard Branch")
+            {
+
             }
             column(GlobalDimension1Code; "Global Dimension 1 Code")
             {
@@ -42,9 +47,9 @@ report 90100 "Employee Details"
             column(BasicPay; "Basic Pay")
             {
             }
-            column(Image;Image)
+            column(Image; Image)
             {
-                
+
             }
             column(age; AgeCalc.CalculateAge(Today, "Birth Date"))
             {
@@ -52,8 +57,13 @@ report 90100 "Employee Details"
             }
         }
     }
-    
+    labels
+    {
+        Title = 'Our Employee Report';
+    }
+
 
     var
         AgeCalc: codeunit AgeCalculation;
+        Title: Label 'Employee Report';
 }

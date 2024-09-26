@@ -11,7 +11,6 @@ table 90104 "CAR Model"
         {
             Caption = 'Model ID NO';
             DataClassification = ToBeClassified;
-            // TableRelation = "No. Series";
 
         }
         field(3; "Make"; Text[250])
@@ -26,8 +25,6 @@ table 90104 "CAR Model"
             Caption = 'Model Name';
 
         }
-
-
 
     }
 

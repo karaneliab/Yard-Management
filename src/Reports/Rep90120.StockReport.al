@@ -14,6 +14,7 @@ report 90120 "Stock Report"
     {
         dataitem(FixedAsset; "Fixed Asset")
         {
+            RequestFilterFields = "Responsible Employee";
             column(RegNo; RegNo)
             {
             }
@@ -29,40 +30,15 @@ report 90120 "Stock Report"
             column(ChassisNo; ChassisNo)
             {
             }
-            dataitem(CarRecievingHeader; "Car Recieving Header")
+            column("Branch"; "FA Location Code")
             {
-                DataItemLink = "FA No." = field("No.");
-                DataItemLinkReference= FixedAsset;
-                column(Date_Received; Date)
-                {
 
-                }
-                column(Buying_Price; "Buying Price")
-                {
-
-                }
             }
+
         }
 
     }
-    requestpage
-    {
-        layout
-        {
-            area(Content)
-            {
-                group(GroupName)
-                {
-                }
-            }
-        }
-        actions
-        {
-            area(Processing)
-            {
-            }
-        }
-    }
+
     labels
     {
         Title = 'Yard Management Stock Report';
@@ -70,3 +46,4 @@ report 90120 "Stock Report"
     var
         Title: Label 'Stock Report';
 }
+

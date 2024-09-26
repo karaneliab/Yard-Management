@@ -15,16 +15,16 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         {
             Caption = 'Model';
             DataClassification = CustomerContent;
-            TableRelation = "CAR Model" where(Make=field("Car Make"));
+            TableRelation = "CAR Model" where(Make = field("Car Make"));
         }
         field(80502; "Insuarance Company"; Text[40])
         {
-            Caption = 'Insuarance Company';
+            Caption = 'Insurance Company';
             DataClassification = CustomerContent;
             TableRelation = "Insuarance Company";
 
         }
-        field(80503; RegNo;Code[20])
+        field(80503; RegNo; Code[20])
         {
             Caption = 'Registration Number';
             DataClassification = CustomerContent;
@@ -43,7 +43,7 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         {
             Caption = 'Country Of First Registration';
             DataClassification = CustomerContent;
-            TableRelation ="Country/Region";
+            TableRelation = "Country/Region";
         }
         field(80507; "Car Insured"; Boolean)
         {
@@ -63,34 +63,34 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         {
             Caption = 'Car Front Pic';
             DataClassification = CustomerContent;
-            
+
         }
         field(50002; "Back Picture"; Media)
         {
             Caption = 'Back Picture';
             DataClassification = CustomerContent;
-          
+
         }
         field(50003; "Left Side Picture"; Media)
         {
             Caption = 'Left Side Picture';
             DataClassification = CustomerContent;
-            
+
         }
         field(59003; "Right Side Picture"; Media)
         {
             Caption = 'Right Side Picture';
             DataClassification = CustomerContent;
-            
+
         }
     }
     keys
     {
-        key(PK;"RegNo","Car Make")
+        key(PK; "RegNo", "Car Make")
         {
-           
+
 
         }
-       
+
     }
 }

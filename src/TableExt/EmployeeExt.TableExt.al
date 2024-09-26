@@ -15,7 +15,7 @@ tableextension 90101 "Employee Ext" extends Employee
                     Error('Invalid Email Format');
             end;
         }
-        // Add changes to table fields here
+
         field(56789; "KRA PIN"; Code[9])
         {
             DataClassification = CustomerContent;
@@ -58,14 +58,13 @@ tableextension 90101 "Employee Ext" extends Employee
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
                                                           Blocked = const(false));
         }
-        field(83674; "Comision Paid";Decimal)
+        field(83674; "Comision Paid"; Decimal)
         {
             Caption = 'Commission Paid';
-            // DataClassification = CustomerContent;
             FieldClass = FlowField;
             CalcFormula = sum("Car Line"."Commission Amount" where("Checked In By" = FIELD("No."),
                                                                     "YardBranch" = field("Yard Branch")));
-            Editable =  false;
+            Editable = false;
 
         }
         field(87463; "Outstanding Commission"; Decimal)

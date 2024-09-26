@@ -29,7 +29,7 @@ table 90100 "CAR Make"
     }
 
 
-   
+
     trigger OnInsert()
     begin
 
@@ -49,8 +49,4 @@ table 90100 "CAR Make"
     begin
 
     end;
-
-
-
-
 }

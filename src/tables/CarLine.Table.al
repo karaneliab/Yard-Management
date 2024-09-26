@@ -11,7 +11,7 @@ table 90111 "Car Line"
             Caption = 'Document No';
 
         }
-    
+
         field(2; RegNo; code[20])
         {
             DataClassification = CustomerContent;
@@ -21,20 +21,20 @@ table 90111 "Car Line"
         {
             DataClassification = CustomerContent;
             Caption = 'Checked in by.';
-            TableRelation = Employee where ("Yard Branch"=field(YardBranch));
-            
+            TableRelation = Employee where("Yard Branch" = field(YardBranch));
+
 
         }
         field(4; YardBranch; Text[250])
         {
             DataClassification = CustomerContent;
             Caption = 'Yard Branch';
-            TableRelation =  "Dimension Value".Code where("Global Dimension No." = const(1),
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
                                                           Blocked = const(false));
             CaptionClass = '1,1,1';
 
         }
-        field(5;"Year of Make";Date)
+        field(5; "Year of Make"; Date)
         {
             Caption = 'Year of Make';
             DataClassification = CustomerContent;
@@ -52,21 +52,22 @@ table 90111 "Car Line"
             Caption = 'Car Make';
             DataClassification = CustomerContent;
             TableRelation = "CAR Make";
-      
+
         }
         field(8; "Car Model"; Text[40])
         {
             Caption = 'Car Model';
             DataClassification = CustomerContent;
-            TableRelation = "CAR Model"  where(Make=field("Car Make"));;
+            TableRelation = "CAR Model" where(Make = field("Car Make"));
+            ;
         }
         field(9; "Chassis Number"; Code[40])
         {
             Caption = 'Chasis Number';
             DataClassification = CustomerContent;
-            
+
         }
-        field(10;"Insurance Company";Text[20])
+        field(10; "Insurance Company"; Text[40])
         {
             Caption = 'Insurance Company';
             DataClassification = CustomerContent;
@@ -85,17 +86,18 @@ table 90111 "Car Line"
             DataClassification = CustomerContent;
             TableRelation = "FA Posting Group";
         }
-         field(13; "FA Class Code"; Code[10])
+        field(13; "FA Class Code"; Code[10])
         {
             Caption = 'FA Class Code';
             TableRelation = "FA Class";
         }
-         field(15; "FA Subclass Code"; Code[10])
+        field(15; "FA Subclass Code"; Code[10])
         {
             Caption = 'FA Subclass Code';
-            TableRelation = "FA Subclass" where("FA Class Code"=field("FA Class Code"));;
+            TableRelation = "FA Subclass" where("FA Class Code" = field("FA Class Code"));
+            ;
         }
-      
+
         // FIELD(14;)
         field(16; "Gen. Prod. Posting Group"; Code[20])
         {
@@ -114,7 +116,7 @@ table 90111 "Car Line"
             // DataClassification = Normal;
             TableRelation = "Depreciation Book";
         }
-        field(19;"FA No";code[20])
+        field(19; "FA No"; code[20])
         {
             Caption = 'fixed asset no';
             TableRelation = "Depreciation Book";
@@ -124,17 +126,17 @@ table 90111 "Car Line"
             Caption = 'Tax Code';
             TableRelation = "Tax Group";
         }
-        field(21;"Depreciation Starting Date";Date)
+        field(21; "Depreciation Starting Date"; Date)
         {
             Caption = 'Depreciation Starting Date';
-            
+
         }
-        field(22;"Depreciation Ending Date";Date)
+        field(22; "Depreciation Ending Date"; Date)
         {
-            
+
             Caption = 'Depreciation Ending Date';
         }
-        field(23;"No of Depreciation Years"; Decimal)
+        field(23; "No of Depreciation Years"; Decimal)
         {
             Caption = 'No of depreciation years';
         }
@@ -152,13 +154,13 @@ table 90111 "Car Line"
 
             end;
         }
-      
-         field(80505; "Year of Manufacture"; Date)
+
+        field(80505; "Year of Manufacture"; Date)
         {
             Caption = 'Year of Manufacture';
             DataClassification = ToBeClassified;
         }
-         field(30; "Commission Amount"; Decimal)
+        field(30; "Commission Amount"; Decimal)
         {
             Caption = 'Commission Amount';
             DataClassification = ToBeClassified;
@@ -167,7 +169,7 @@ table 90111 "Car Line"
     }
     keys
     {
-        key(ki; RegNo, "Document No.",YardBranch)
+        key(ki; RegNo, "Document No.", YardBranch)
         {
             Clustered = true;
         }
@@ -175,13 +177,13 @@ table 90111 "Car Line"
     trigger OnInsert()
     begin
         TestStatus();
-         CommisionCalculate()
+        CommisionCalculate()
     end;
 
     trigger OnModify()
     begin
         TestStatus();
-         CommisionCalculate()
+        CommisionCalculate()
 
     end;
 
@@ -233,11 +235,11 @@ table 90111 "Car Line"
         if CarReceivingHeader.Get(Rec."Document No.") then begin
             BuyingPrice := CarReceivingHeader."Buying Price";
 
-            
+
             if CarMakeCommission.Get(Rec."Car Make") then begin
                 CommissionRate := CarMakeCommission."Commission Rate";
 
-                
+
                 "Commission Amount" := CalculateCommissionAmount(CommissionRate, BuyingPrice);
             end;
         end;
@@ -245,12 +247,12 @@ table 90111 "Car Line"
 
     procedure CalculateCommissionAmount(CommissionRate: Decimal; BuyingPrice: Decimal): Decimal
     begin
-        exit((BuyingPrice * CommissionRate) / 100); 
+        exit((BuyingPrice * CommissionRate) / 100);
     end;
-    
+
 
     var
-        
+
         ProdOrderLine: Record "Prod. Order Line";
         Text022: Label 'Do you want to change %1?';
         GLSetup: Record "General Ledger Setup";

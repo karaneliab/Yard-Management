@@ -13,6 +13,7 @@ report 90110 "Commission Report"
     {
         dataitem(Employee; Employee)
         {
+            RequestFilterFields = "No.";
             column(No; "No.")
             {
             }
@@ -24,7 +25,7 @@ report 90110 "Commission Report"
             }
             column(department; "Yard Branch")
             {
-                
+
             }
             column(Commission; "Comision Paid")
             {
@@ -36,8 +37,8 @@ report 90110 "Commission Report"
             }
             dataitem(CarLine; "Car Line")
             {
-               DataItemLink = "Checked In By" = field("No.");
-                DataItemLinkReference= Employee;
+                DataItemLink = "Checked In By" = field("No.");
+                DataItemLinkReference = Employee;
 
 
                 RequestFilterFields = "Checked In By";
@@ -48,7 +49,16 @@ report 90110 "Commission Report"
             }
 
         }
-    
+
     }
+    labels
+    {
+        Title = 'commision Report';
+    }
+
+
+    var
+
+        Title: Label 'commission  Report';
 
 }

@@ -10,12 +10,12 @@ page 90115 "Car Yard Management "
     {
         area(RoleCenter)
         {
-            part(Eliab1; "Approvals Activities")
+            part(Approvals; "Approvals Activities")
             {
                 ApplicationArea = All;
             }
 
-            part("Eli&ab2"; "Posted Sales Invoice Subform")
+            part("PostedSalesInvoice"; "Posted Sales Invoice Subform")
             {
                 ApplicationArea = All;
 
@@ -111,11 +111,11 @@ page 90115 "Car Yard Management "
             group("Assets Management")
             {
                 Caption = 'Assets Management';
-                action("Fixes Assets")
+                action("Fix&ed Assets")
                 {
                     RunObject = Page "Fixed Asset List";
                     ApplicationArea = Basic, Suite;
-                    Caption = 'Fixes Assets';
+                    Caption = 'Fixed Assets';
 
                 }
             }
@@ -228,7 +228,7 @@ page 90115 "Car Yard Management "
                     {
                         RunObject = Page "Posted Purchase Invoice Lines";
                         ApplicationArea = All;
-                         RunPageLink = Type = CONST("Fixed Asset"); 
+                        RunPageLink = Type = CONST("Fixed Asset"); 
                         Caption = 'Posted Car Receipt List';
                         ToolTip = 'Specifies the Posted car receipt list';
                     }
@@ -248,9 +248,10 @@ page 90115 "Car Yard Management "
                 }
                 action("Open Purchase Invoices")
                 {
-                    // RunObject = Page "Posted Purchase Invoices";
+                    RunObject = Page "Purchase Invoices";
+                    RunPageLink = Status = const(Open);
                     Caption = 'Open Purchase Invoices';
-                    ToolTip = 'Specifies theOpen Purchase Invoices';
+                    ToolTip = 'Specifies the Open Purchase Invoices';
                 }
                 action("Car Receiving")
                 {
@@ -326,14 +327,7 @@ page 90115 "Car Yard Management "
                         RunObject = Page "Fixed Asset Setup";
                         ToolTip = 'Define your accounting policies for fixed assets, such as the allowed posting period and whether to allow posting to main assets. Set up your number series for creating new fixed assets.';
                     }
-                    action("&FA Locations")
-                    {
-                        ApplicationArea = FixedAssets;
-                        Caption = '&Fixed Locations';
-                        Image = Setup;
-                        RunObject = Page "FA Locations";
-                        ToolTip = 'Define your accounting policies for fixed assets, such as the allowed posting period and whether to allow posting to main assets. Set up your number series for creating new fixed assets.';
-                    }
+                    
                 }
             }
             group("Yard Employees")
@@ -344,13 +338,24 @@ page 90115 "Car Yard Management "
                     ApplicationArea = Basic, Suite;
                     Caption = 'Employees';
                 }
-                action("Employee Report")
+              
+
+            }
+            group("Yard Reports")
+            {
+                Visible = false;
+                 action("Employee Report")
                 {
                     RunObject = report  "Employee Details";
                     ApplicationArea = Basic, Suite;
                     Caption = 'Employee Report';
                 }
-
+                action("Commission Report")
+                {
+                    RunObject = report "Commission Report";
+                    ApplicationArea = Basic, Suite;
+                    Caption = 'Commission Report';
+                }
             }
 
         }

@@ -6,6 +6,7 @@ using Microsoft.Purchases.Document;
 using Microsoft.Foundation.NoSeries;
 using Microsoft.FixedAssets.Depreciation;
 using Microsoft.FixedAssets.FixedAsset;
+using Microsoft.Finance.Dimension;
 
 table 90110 "Car Recieving Header"
 {
@@ -88,6 +89,15 @@ table 90110 "Car Recieving Header"
             Caption = 'Fixed Asset No.';
             TableRelation = "Fixed Asset";
         }
+         field(4; YardBranch; Text[250])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'Yard Branch';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
+                                                          Blocked = const(false));
+            CaptionClass = '1,1,3';
+
+        }
     }
 
     local procedure TestStatus()
@@ -102,7 +112,7 @@ table 90110 "Car Recieving Header"
     begin
         if Status <> Status::Approved then
             exit;
-        // TestField("Customer No.");
+        
         "Last Released Date" := CurrentDateTime;
     end;
 
@@ -185,6 +195,8 @@ table 90110 "Car Recieving Header"
                     Error('Fill in the registration field');
                 if CarLine."Country Of Registration" = '' then
                     Error('Enter the country of registration ');
+                if CarLine."Checked In By" = '' then
+                    Error('Enter the checked in by field');
                 if CarLine."FA Class Code" = '' then
                     Error('Enter the Fa class code to get correct subclass with default posting group');
                 ExistingFixedAsset.Reset();
@@ -197,6 +209,7 @@ table 90110 "Car Recieving Header"
                 FixedAsset."Description" := CarLine.RegNo;
                 FixedAsset."Model" := CarLine."Car Model";
                 FixedAsset."RegNo" := CarLine.RegNo;
+                FixedAsset."Responsible Employee" := CarLine."Checked In By";
                 FixedAsset."Year of Manufacture" := CarLine."Year of Make";
                 FixedAsset."Country Of First Registration" := CarLine."Country Of Registration";
                 FixedAsset."FA Location Code" := CarLine.YardBranch;
@@ -225,31 +238,6 @@ table 90110 "Car Recieving Header"
 
 
     end;
-    //  procedure CommisionCalculate(var Header: Record "Car Recieving Header")
-    // var
-    //     CarReceivingHeader: Record "Car Recieving Header";
-    //     CommissionRate: Decimal;
-    //     CarLine: Record "Car Line";
-    //     CarMakeCommission: Record "Commission Rate";
-    //     BuyingPrice: Decimal;
-    // begin
-    //     CarLine.Reset();
-    //     if CarReceivingHeader.Get(Rec.CarReceivingHeader."Document No.") then begin
-    //         BuyingPrice := CarReceivingHeader."Buying Price";
-
-            
-    //         if CarMakeCommission.Get(Rec."Car Make") then begin
-    //             CommissionRate := CarMakeCommission."Commission Rate";
-
-                
-    //             CarLine."Commission Amount" := CalculateCommissionAmount(CommissionRate, BuyingPrice);
-    //         end;
-    //     end;
-    // end;
-
-    // procedure CalculateCommissionAmount(CommissionRate: Decimal; BuyingPrice: Decimal): Decimal
-    // begin
-    //     exit((BuyingPrice * CommissionRate) / 100); 
-    // end;
+    
 
 }

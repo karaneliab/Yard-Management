@@ -67,7 +67,7 @@ codeunit 90101 "Custom Workflow Mgmt"
     begin
         exit(StrSubstNo(WorkflowEventDesc, RecRef.Name));
 
-    end;
+    end;    
     procedure GetWorkflowEventDesc(WorkflowEventDesc: Text; TableName: Text): Text
     begin
         exit(StrSubstNo(WorkflowEventDesc, TableName));
