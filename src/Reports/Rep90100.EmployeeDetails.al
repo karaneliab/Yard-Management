@@ -1,6 +1,7 @@
 namespace YardManagement.YardManagement;
 
 using Microsoft.HumanResources.Employee;
+using Microsoft.Foundation.Address;
 
 report 90100 "Employee Details"
 {
@@ -13,10 +14,20 @@ report 90100 "Employee Details"
     {
         dataitem(Employee; Employee)
         {
-            RequestFilterFields = "No.";
+            RequestFilterFields = "No.", "Search Name";
+            column(FORMAT_TODAY_0_4_; Format(Today, 0, 4))
+            {
+            }
+             column(COMPANYNAME; COMPANYPROPERTY.DisplayName())
+            {
+            }
+            column(CurrReport_PAGENOCaption; CurrReport_PAGENOCaptionLbl)
+            {
+            }
             column(No; "No.")
             {
             }
+           
             column(FirstName; "First Name")
             {
             }
@@ -27,6 +38,7 @@ report 90100 "Employee Details"
             {
 
             }
+            
             column(Status; Status)
             {
 
@@ -35,6 +47,16 @@ report 90100 "Employee Details"
             {
             }
             column(Yard_Branch; "Yard Branch")
+            {
+
+            }
+            column(EmployeeAddr_1_; EmployeeAddr[1])
+            {
+            }
+            column(EmployeeAddr_2_; EmployeeAddr[2])
+            {
+            }
+            column(EmployeeAddr_3_; EmployeeAddr[3])
             {
 
             }
@@ -51,10 +73,25 @@ report 90100 "Employee Details"
             {
 
             }
+            column(Employee_PagerCaption; FieldCaption(Pager))
+            {
+            }
+             column(Employee_Pager; Pager)
+            {
+            }
             column(age; AgeCalc.CalculateAge(Today, "Birth Date"))
             {
 
             }
+            trigger OnAfterGetRecord()
+            begin
+                FormatAddr.Employee(EmployeeAddr, Employee);
+                if Counter = RecPerPageNum then begin
+                    GroupNo := GroupNo + 1;
+                    Counter := 0;
+                end;
+                Counter := Counter + 1;
+            end;
         }
     }
     labels
@@ -66,4 +103,10 @@ report 90100 "Employee Details"
     var
         AgeCalc: codeunit AgeCalculation;
         Title: Label 'Employee Report';
+        CurrReport_PAGENOCaptionLbl: Label 'Page';
+        EmployeeAddr: array[8] of Text[100];
+        FormatAddr: Codeunit "Format Address";
+        Counter: Integer;
+        RecPerPageNum: Integer;
+        GroupNo: Integer;
 }

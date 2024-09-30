@@ -24,21 +24,21 @@ page 90103 "Car Subform"
                 {
                     ToolTip = 'Specifies the value of the Yard Branch field.', Comment = '%';
                 }
-                field("Document No."; Rec."Document No.")
-                {
-                    ToolTip = 'Specifies the value of the Document No field.', Comment = '%';
-                }
+                // field("Document No."; Rec."Document No.")
+                // {
+                //     ToolTip = 'Specifies the value of the Document No field.', Comment = '%';
+                // }
                 field("Checked In By"; Rec."Checked In By")
                 {
                     ToolTip = 'Specifies the value of the Checked in by. field.', Comment = '%';
                 }
 
-                field("Car Make";Rec."Car Make")
+                field("Make";Rec."Car Make")
                 {
                     ToolTip = 'Specifies the value of the Car Make field.', Comment = '%';
                 }
                
-                field("Car Model";Rec."Car Model")
+                field("Model";Rec."Car Model")
                 {
                     ToolTip = 'Specifies the value of the Car Model field.', Comment = '%';
                 }
@@ -53,10 +53,15 @@ page 90103 "Car Subform"
                 field("Car Insured";Rec."Car Insured")
                 {
                     ToolTip = 'Specifies if the car is insured';
+                    trigger OnValidate()
+                    begin
+                        UpdateInsuranceCompanyEditable();
+                    end;
                 }
                 field("Insuarance Company";Rec."Insurance Company")
                 {
                     ToolTip = 'Specifies the Insurance company';
+                    Editable =  IsInsuranceCompanyEditable;
                 }
                 
                 field("Depreciation Book";Rec."Depreciation Book")
@@ -99,39 +104,46 @@ page 90103 "Car Subform"
                 {
                     ToolTip = 'Fa subclass Code';
                 }
-                 field("Commission Amount"; Rec."Commission Amount")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Displays the commission amount for the car make.';
-                }
+                //  field("Commission Amount"; Rec."Commission Amount")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Displays the commission amount for the car make.';
+                // }
             }
         }
     }
 
+  var
+        IsInsuranceCompanyEditable: Boolean;
 
-
-    actions
-    {
-        area(Processing)
-        {
-            action("Recalculate Commission")
-            {
-                Caption = 'Recalculate Commission';
-                Image = Recalculate;
-                ApplicationArea = All;
-
-                trigger OnAction()
-                begin
-                    Rec. CommisionCalculate();
-                    Rec.Modify();
-                end;
-            }
-        }
-    }
-
-    trigger OnOpenPage()
+    trigger OnAfterGetRecord()
     begin
-        // Calculate the commission when the page is opened
-        Rec.CommisionCalculate();
+        UpdateInsuranceCompanyEditable();
     end;
-}
+
+    procedure UpdateInsuranceCompanyEditable()
+    begin
+        IsInsuranceCompanyEditable := Rec."Car Insured";
+    end;
+   
+            // action("Recalculate Commission")
+            // {
+            //     Caption = 'Recalculate Commission';
+            //     Image = Recalculate;
+            //     ApplicationArea = All;
+
+            //     trigger OnAction()
+            //     begin
+            //         Rec. CommisionCalculate();
+            //         Rec.Modify();
+            //     end;
+            // }
+        }
+    
+
+    // trigger OnOpenPage()
+    // begin
+    //     // Calculate the commission when the page is opened
+    //     Rec.CommisionCalculate();
+    // end;
+

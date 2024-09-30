@@ -30,6 +30,8 @@ pageextension 90105 CustomerListExt extends "Customer Card"
         
     
     }
+
+    
     trigger OnOpenPage();
     begin
         Message('App published: Hello world');

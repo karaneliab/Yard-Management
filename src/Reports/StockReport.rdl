@@ -19,12 +19,12 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>7in</Width>
+                  <Width>8.36456in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>1.98958in</Height>
+                  <Height>2.29043in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -39,8 +39,8 @@
                                     <TextRun>
                                       <Value>=Parameters!Title.Value</Value>
                                       <Style>
-                                        <FontFamily>Times New Roman</FontFamily>
-                                        <FontSize>14pt</FontSize>
+                                        <FontFamily>Avenir LT Pro 55 Roman</FontFamily>
+                                        <FontSize>13pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
@@ -51,8 +51,8 @@
                               <rd:DefaultName>Textbox1</rd:DefaultName>
                               <Top>0.20833in</Top>
                               <Left>0.26042in</Left>
-                              <Height>0.51042in</Height>
-                              <Width>4.71875in</Width>
+                              <Height>0.375in</Height>
+                              <Width>3.75222in</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -67,32 +67,34 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>0.8688in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>1.16046in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>1.16046in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>1.1188in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>1.16046in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.12326in</Width>
+                                    <Width>1.0372in</Width>
+                                  </TablixColumn>
+                                  <TablixColumn>
+                                    <Width>1.16046in</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>0.35417in</Height>
+                                    <Height>0.52604in</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox2">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -100,8 +102,9 @@
                                                   <TextRun>
                                                     <Value>Reg No</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -113,6 +116,7 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -126,7 +130,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox4">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -134,8 +137,9 @@
                                                   <TextRun>
                                                     <Value>Chassis No</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -147,6 +151,7 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -160,7 +165,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox6">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -168,8 +172,9 @@
                                                   <TextRun>
                                                     <Value>Car Insured</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -181,6 +186,7 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -194,7 +200,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox8">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -202,8 +207,9 @@
                                                   <TextRun>
                                                     <Value>Insuarance Company</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -215,6 +221,7 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -228,7 +235,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox10">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -236,8 +242,9 @@
                                                   <TextRun>
                                                     <Value>Yearof Manufacture</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -249,6 +256,42 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
+                                              </Border>
+                                              <BackgroundColor>Gray</BackgroundColor>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
+                                          <Textbox Name="Textbox3">
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>Purch.Price</Value>
+                                                    <Style>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
+                                                      <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox3</rd:DefaultName>
+                                            <Style>
+                                              <Border>
+                                                <Color>LightGrey</Color>
+                                                <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -262,7 +305,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="Textbox12">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -270,8 +312,9 @@
                                                   <TextRun>
                                                     <Value>Branch</Value>
                                                     <Style>
-                                                      <FontFamily>Tahoma</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 45 Book</FontFamily>
                                                       <FontSize>14pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -283,6 +326,7 @@
                                               <Border>
                                                 <Color>LightGrey</Color>
                                                 <Style>Solid</Style>
+                                                <Width>1.5pt</Width>
                                               </Border>
                                               <BackgroundColor>Gray</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
@@ -296,7 +340,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.35417in</Height>
+                                    <Height>0.40104in</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -309,7 +353,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!RegNo.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -320,8 +364,7 @@
                                             <rd:DefaultName>RegNo</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -342,7 +385,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!ChassisNo.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -353,8 +396,7 @@
                                             <rd:DefaultName>ChassisNo</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -375,7 +417,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!CarInsured.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -386,8 +428,7 @@
                                             <rd:DefaultName>CarInsured</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -400,7 +441,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="InsuaranceCompany">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -408,7 +448,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!InsuaranceCompany.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -419,8 +459,7 @@
                                             <rd:DefaultName>InsuaranceCompany</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -433,7 +472,6 @@
                                       <TablixCell>
                                         <CellContents>
                                           <Textbox Name="YearofManufacture">
-                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -441,7 +479,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!YearofManufacture.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -452,8 +490,39 @@
                                             <rd:DefaultName>YearofManufacture</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
+                                              </Border>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                            </Style>
+                                          </Textbox>
+                                        </CellContents>
+                                      </TablixCell>
+                                      <TablixCell>
+                                        <CellContents>
+                                          <Textbox Name="Acquisition_cost1">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Fields!Acquisition_cost.Value</Value>
+                                                    <Style>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
+                                                      <FontSize>12pt</FontSize>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style />
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Acquisition_cost1</rd:DefaultName>
+                                            <Style>
+                                              <Border>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -474,7 +543,7 @@
                                                   <TextRun>
                                                     <Value>=Fields!Branch.Value</Value>
                                                     <Style>
-                                                      <FontFamily>Times New Roman</FontFamily>
+                                                      <FontFamily>Avenir LT Pro 35 Light</FontFamily>
                                                       <FontSize>12pt</FontSize>
                                                     </Style>
                                                   </TextRun>
@@ -485,8 +554,7 @@
                                             <rd:DefaultName>Branch</rd:DefaultName>
                                             <Style>
                                               <Border>
-                                                <Color>LightGrey</Color>
-                                                <Style>Solid</Style>
+                                                <Style>None</Style>
                                               </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
@@ -508,6 +576,7 @@
                                   <TablixMember />
                                   <TablixMember />
                                   <TablixMember />
+                                  <TablixMember />
                                 </TablixMembers>
                               </TablixColumnHierarchy>
                               <TablixRowHierarchy>
@@ -523,8 +592,8 @@
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>1.25917in</Top>
                               <Left>0.26042in</Left>
-                              <Height>0.70833in</Height>
-                              <Width>6.73958in</Width>
+                              <Height>0.92708in</Height>
+                              <Width>7.66664in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <Border>
@@ -532,6 +601,74 @@
                                 </Border>
                               </Style>
                             </Tablix>
+                            <Textbox Name="COMPANYNAME">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=First(Fields!COMPANYNAME.Value)</Value>
+                                      <Style>
+                                        <FontFamily>Avenir LT Pro 45 Book</FontFamily>
+                                        <FontSize>12pt</FontSize>
+                                        <FontWeight>Bold</FontWeight>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>COMPANYNAME</rd:DefaultName>
+                              <Top>0.73833in</Top>
+                              <Left>6.06273in</Left>
+                              <Height>0.3125in</Height>
+                              <Width>2.19766in</Width>
+                              <ZIndex>2</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="FORMAT_TODAY_0_4_">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=First(Fields!FORMAT_TODAY_0_4_.Value)</Value>
+                                      <Style>
+                                        <FontFamily>Avenir LT Pro 35 Light</FontFamily>
+                                        <FontSize>11pt</FontSize>
+                                        <FontWeight>Bold</FontWeight>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>FORMAT_TODAY_0_4_</rd:DefaultName>
+                              <Top>0.32167in</Top>
+                              <Left>6.06273in</Left>
+                              <Height>0.22917in</Height>
+                              <Width>2.19766in</Width>
+                              <ZIndex>3</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
                           </ReportItems>
                           <KeepTogether>true</KeepTogether>
                           <Style>
@@ -563,8 +700,8 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>1.98958in</Height>
-            <Width>7in</Width>
+            <Height>2.29043in</Height>
+            <Width>8.36456in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -572,10 +709,10 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.98958in</Height>
+        <Height>2.29043in</Height>
         <Style />
       </Body>
-      <Width>7in</Width>
+      <Width>8.3854in</Width>
       <Page>
         <Style />
       </Page>
@@ -650,6 +787,12 @@ End Function
         <Field Name="RegNo">
           <DataField>RegNo</DataField>
         </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
         <Field Name="YearofManufacture">
           <DataField>YearofManufacture</DataField>
         </Field>
@@ -664,6 +807,18 @@ End Function
         </Field>
         <Field Name="Branch">
           <DataField>Branch</DataField>
+        </Field>
+        <Field Name="Acquisition_cost">
+          <DataField>Acquisition_cost</DataField>
+        </Field>
+        <Field Name="Acquisition_costFormat">
+          <DataField>Acquisition_costFormat</DataField>
+        </Field>
+        <Field Name="FA_Posting_Category">
+          <DataField>FA_Posting_Category</DataField>
+        </Field>
+        <Field Name="Part_of_Book_Value">
+          <DataField>Part_of_Book_Value</DataField>
         </Field>
       </Fields>
       <Query>

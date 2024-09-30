@@ -221,3 +221,14 @@ table 90111 "Car Line"
         Text024: Label 'If you change %1 it may affect existing production orders.\';
         GenProdPostingGrp: Record "Gen. Product Posting Group";
 }
+   //     if CarReceivingHeader.Get(Rec."Document No.") then begin
+    //          Profit := CarReceivingHeader."Profit";
+
+
+    //         if CarMakeCommission.Get(Rec."Make") then begin
+    //             CommissionRate := CarMakeCommission."Commission Rate";
+
+
+    //             "Commission Amount" := CalculateCommissionAmount(CommissionRate,  Profit);
+    //         end;
+    // 

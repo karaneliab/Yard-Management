@@ -38,11 +38,11 @@ page 90102 "Car Receiving Card"
                 {
                     ToolTip = 'Specifies the value of the Last Released Date field.', Comment = '%';
                 }
-                field("Buying Price"; Rec."Buying Price")
-                {
-                    ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
+                // field("Buying Price"; Rec."Buying Price")
+                // {
+                //     ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
 
-                }
+                // }
 
 
                 field(Status; Rec.Status)

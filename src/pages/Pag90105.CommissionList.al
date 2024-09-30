@@ -7,7 +7,7 @@ page 90105 "Commission List"
     PageType = List;
     SourceTable = "Commission Rate";
     UsageCategory = Lists;
-    CardPageId = "Commission Setup Card";
+    // CardPageId = "Commission Setup Card";
     
     layout
     {

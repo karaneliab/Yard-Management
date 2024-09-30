@@ -19,7 +19,7 @@ pageextension 90101 "Fixed Assets" extends "Fixed Asset Card"
                     ToolTip = 'Specifies the Car Model.', Comment = '%';
                     ApplicationArea = All;
                 }
-                field("Insuarance Company"; Rec."Insuarance Company")
+                field("Insuarance Company"; Rec."Insurance Company")
                 {
                     ApplicationArea = ALL;
                     ToolTip = 'Specifies the Insuarance Company.', Comment = '%';
@@ -57,6 +57,15 @@ pageextension 90101 "Fixed Assets" extends "Fixed Asset Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Country Of First Registration.', Comment = '%';
+                }
+                field(AcquisitionCost;Rec.AcquisitionCost)
+                {
+                    ToolTip = 'Specifies the cost of the acquisition cost';
+                    trigger OnDrillDown()
+                    begin
+                        FADepreciationBook.DrillDownOnBookValue();
+                    end;
+                    
                 }
 
 

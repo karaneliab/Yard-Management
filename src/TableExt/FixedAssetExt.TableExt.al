@@ -6,7 +6,7 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
     {
         field(80500; "Car Make"; Text[40])
         {
-            Caption = 'Car Make';
+            Caption = 'Make';
             DataClassification = ToBeClassified;
             TableRelation = "CAR Make";
         }
@@ -17,11 +17,11 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
             DataClassification = CustomerContent;
             TableRelation = "CAR Model" where(Make = field("Car Make"));
         }
-        field(80502; "Insuarance Company"; Text[40])
+        field(80502; "Insurance Company"; Text[40])
         {
             Caption = 'Insurance Company';
             DataClassification = CustomerContent;
-            TableRelation = "Insuarance Company";
+            TableRelation = Vendor where("Vendor Type" = CONST(Insurer));
 
         }
         field(80503; RegNo; Code[20])
@@ -52,12 +52,23 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
             trigger OnValidate()
             begin
                 if "Car Insured" then begin
-                    "Insuarance Company" := '';
+                    "Insurance Company" := '';
                     "Year of Manufacture" := 0D;
 
                 end;
 
             end;
+        }
+        field(50000;AcquisitionCost;Decimal)
+        {
+            Caption = 'AcquisitionCost';
+            Editable = false;
+            FieldClass = FlowField;
+            // CalcFormula = sum("FA Ledger Entry".Amount where("FA No." = FIELD("No."),
+            //                                                   "Depreciation Book Code" = FIELD("FA Location Code")));
+            CalcFormula = lookup("Purch. Inv. Line"."Direct Unit Cost" WHERE("No." = field("No.")));
+                                                                  
+
         }
         field(50001; "Front Pic"; Media)
         {

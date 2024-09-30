@@ -5,7 +5,7 @@ page 90106 "Car Model"
     PageType = List;
     SourceTable = "CAR Model";
     UsageCategory = Lists;
-    CardPageId = "Car Model card";
+    // CardPageId = "Car Model card";
 
     layout
     {

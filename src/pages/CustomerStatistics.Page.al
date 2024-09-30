@@ -16,10 +16,10 @@ page 90118 "Customer Statis&tics"
                 ApplicationArea = All;
                 ToolTip = 'Specifies customer number.';
             }
-            field("Buying Price"; Rec."Buying Price")
-            {
-                ToolTip = 'Specifies the Buying Price.';
-            }
+            // field("Buying Price"; Rec."Buying Price")
+            // {
+            //     ToolTip = 'Specifies the Buying Price.';
+            // }
 
         }
 

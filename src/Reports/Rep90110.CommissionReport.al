@@ -1,6 +1,8 @@
 namespace YardManagement.YardManagement;
 
 using Microsoft.HumanResources.Employee;
+using Microsoft.Sales.Document;
+using Microsoft.Sales.History;
 
 report 90110 "Commission Report"
 {
@@ -17,6 +19,12 @@ report 90110 "Commission Report"
             column(No; "No.")
             {
             }
+             column(FORMAT_TODAY_0_4_; Format(Today, 0, 4))
+            {
+            }
+             column(COMPANYNAME; COMPANYPROPERTY.DisplayName())
+            {
+            }
             column(FirstName; "First Name")
             {
             }
@@ -27,10 +35,10 @@ report 90110 "Commission Report"
             {
 
             }
-            column(Commission; "Comision Paid")
-            {
+            // column(Commission; "Comision Paid")
+            // {
 
-            }
+            // }
             column("OutStanding"; "Outstanding Commission")
             {
 
@@ -46,6 +54,17 @@ report 90110 "Commission Report"
                 {
 
                 }
+            }
+            dataitem("Sales Invoice";"Sales Line")
+            {
+                // DataItemLink = "No." = field("Yard Branch");
+                DataItemLink = "Shortcut Dimension 1 Code" = field("Yard Branch");
+                // DataItemLinkReference = Employee;
+                column(Commission;Commission)
+                {
+
+                }
+
             }
 
         }

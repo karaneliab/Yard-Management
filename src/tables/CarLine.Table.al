@@ -45,7 +45,7 @@ table 90111 "Car Line"
         {
             Caption = 'Received From';
             DataClassification = CustomerContent;
-            TableRelation = Vendor;
+            TableRelation = Vendor where("Vendor Type" = CONST(Supplier));
         }
         field(7; "Car Make"; Text[250])
         {
@@ -71,7 +71,8 @@ table 90111 "Car Line"
         {
             Caption = 'Insurance Company';
             DataClassification = CustomerContent;
-            TableRelation = "Insuarance Company";
+            // TableRelation = "Insuarance Company";
+            TableRelation = Vendor where("Vendor Type" = CONST(Insurer));
         }
         field(11; "Country Of Registration"; Text[250])
         {
@@ -144,15 +145,16 @@ table 90111 "Car Line"
         {
             Caption = 'Car Insured';
             DataClassification = ToBeClassified;
-            trigger OnValidate()
-            begin
-                if "Car Insured" then begin
-                    "Insurance Company" := '';
-                    "Year of Manufacture" := 0D;
+            // trigger OnValidate()
+            // begin
+            //     if "Car Insured" then begin
 
-                end;
+            //         "Insurance Company" := '';
+            //         "Year of Manufacture" := 0D;
 
-            end;
+            //     end;
+
+            // end;
         }
 
         field(80505; "Year of Manufacture"; Date)
@@ -169,21 +171,25 @@ table 90111 "Car Line"
     }
     keys
     {
-        key(ki; RegNo, "Document No.", YardBranch)
+        key(ki; RegNo, "Document No.", YardBranch,"Chassis Number")
         {
             Clustered = true;
+        }
+        key(key2;"Chassis Number")
+        {
+            
         }
     }
     trigger OnInsert()
     begin
         TestStatus();
-        CommisionCalculate()
+        // CommisionCalculate()
     end;
 
     trigger OnModify()
     begin
         TestStatus();
-        CommisionCalculate()
+        // CommisionCalculate()
 
     end;
 
@@ -211,9 +217,7 @@ table 90111 "Car Line"
             if CarHeader.Status = CarHeader.Status::"Approved" then
                 Error(StatusCannotBeReleasedErr, CarHeader.Status);
     end;
-
-
-
+    
 
     local procedure EmployeeStatus()
     var
@@ -225,30 +229,30 @@ table 90111 "Car Line"
     end;
 
 
-    procedure CommisionCalculate()
-    var
-        CarReceivingHeader: Record "Car Recieving Header";
-        CommissionRate: Decimal;
-        CarMakeCommission: Record "Commission Rate";
-        BuyingPrice: Decimal;
-    begin
-        if CarReceivingHeader.Get(Rec."Document No.") then begin
-            BuyingPrice := CarReceivingHeader."Buying Price";
+    // procedure CommisionCalculate()
+    // var
+    //     CarReceivingHeader: Record "Car Recieving Header";
+    //     CommissionRate: Decimal;
+    //     CarMakeCommission: Record "Commission Rate";
+    //     BuyingPrice: Decimal;
+    // begin
+    //     if CarReceivingHeader.Get(Rec."Document No.") then begin
+    //         BuyingPrice := CarReceivingHeader."Buying Price";
 
 
-            if CarMakeCommission.Get(Rec."Car Make") then begin
-                CommissionRate := CarMakeCommission."Commission Rate";
+    //         if CarMakeCommission.Get(Rec."Car Make") then begin
+    //             CommissionRate := CarMakeCommission."Commission Rate";
 
 
-                "Commission Amount" := CalculateCommissionAmount(CommissionRate, BuyingPrice);
-            end;
-        end;
-    end;
+    //             "Commission Amount" := CalculateCommissionAmount(CommissionRate, BuyingPrice);
+    //         end;
+    //     end;
+    // end;
 
-    procedure CalculateCommissionAmount(CommissionRate: Decimal; BuyingPrice: Decimal): Decimal
-    begin
-        exit((BuyingPrice * CommissionRate) / 100);
-    end;
+    // procedure CalculateCommissionAmount(CommissionRate: Decimal; BuyingPrice: Decimal): Decimal
+    // begin
+    //     exit((BuyingPrice * CommissionRate) / 100);
+    // end;
 
 
     var

@@ -1,104 +1,113 @@
-table 90103 "Insuarance Company"
-{
-    DataClassification = ToBeClassified;
-    LookupPageId = "Insuarance Company Card";
-    DrillDownPageId = "Insuarance Company Card";
+// table 90103 "Insuarance Company"
+// {
+//     DataClassification = ToBeClassified;
+//     LookupPageId = "Insuarance Company Card";
+//     DrillDownPageId = "Insuarance Company Card";
 
-    fields
-    {
-        field(1; "No."; Code[20])
-        {
-            Caption = 'No.';
-            DataClassification = CustomerContent;
+//     fields
+//     {
+//         // ! Modifications on this  vendor table extension to fit this details and type
+//         // ! Caption renaming to hookup table as a root node(naming repetition)
+//         // ! restructure and go through commission  all through
+//         // ! commission ledger  entry table
+//         // ! commission lodgic restructurel
+//         // !dimension department!
+//         // ! user setup extension
+//         // ! setup re arrangement
 
-        }
-        field(2; "Company Name"; Text[250])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Company Name';
+//         field(1; "No."; Code[20])
+//         {
+//             Caption = 'No.';
+//             DataClassification = CustomerContent;
 
-        }
-        field(3; "Address"; Text[250])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Address';
-        }
-        field(4; "State"; Text[250])
-        {
-            Caption = 'State';
-            DataClassification = CustomerContent;
+//         }
+//         field(2; "Company Name"; Text[250])
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Company Name';
 
-        }
-        field(5; "Phone Number"; Text[250])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Phone Number';
+//         }
+//         field(3; "Address"; Text[250])
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Address';
+//         }
+//         field(4; "State"; Text[250])
+//         {
+//             Caption = 'State';
+//             DataClassification = CustomerContent;
 
-        }
-        field(6; Email; Text[250])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Email';
-        }
-        field(7; "Postal Code"; Integer)
-        {
-            Caption = 'Postal Code';
-            DataClassification = CustomerContent;
+//         }
+//         field(5; "Phone Number"; Text[250])
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Phone Number';
 
-        }
-        field(8; "Website Url"; Text[250])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Website Url';
+//         }
+//         field(6; Email; Text[250])
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Email';
+//         }
+//         field(7; "Postal Code"; Integer)
+//         {
+//             Caption = 'Postal Code';
+//             DataClassification = CustomerContent;
 
-        }
-        field(9; Status; Enum "Insuarance Company Status")
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Status';
-        }
-        field(10; "Industry Type"; Enum "Industry Type")
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Specifies insurance industry category';
-        }
-        field(11; "Coverage Types"; Enum "Coverage Types")
-        {
-            Caption = 'Types of insurance policies provided';
-            DataClassification = CustomerContent;
-        }
+//         }
+//         field(8; "Website Url"; Text[250])
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Website Url';
 
-    }
+//         }
+//         field(9; Status; Enum "Insuarance Company Status")
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Status';
+//         }
+//         field(10; "Industry Type"; Enum "Industry Type")
+//         {
+//             DataClassification = CustomerContent;
+//             Caption = 'Specifies insurance industry category';
+//         }
+//         field(11; "Coverage Types"; Enum "Coverage Types")
+//         {
+//             Caption = 'Types of insurance policies provided';
+//             DataClassification = CustomerContent;
+//         }
 
-    keys
-    {
-        key(Key1; "No.","Company Name",Status)
-        {
-            Clustered = true;
-        }
-    }
+//     }
+
+//     keys
+//     {
+//         key(Key1; "No.","Company Name",Status)
+//         {
+//             Clustered = true;
+//         }
+//     }
 
 
 
 
-    trigger OnInsert()
-    begin
+//     trigger OnInsert()
+//     begin
 
-    end;
+//     end;
 
-    trigger OnModify()
-    begin
+//     trigger OnModify()
+//     begin
 
-    end;
+//     end;
 
-    trigger OnDelete()
-    begin
+//     trigger OnDelete()
+//     begin
 
-    end;
+//     end;
 
-    trigger OnRename()
-    begin
+//     trigger OnRename()
+//     begin
 
-    end;
+//     end;
 
-}
+// }

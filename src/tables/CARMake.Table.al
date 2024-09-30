@@ -9,14 +9,14 @@ table 90100 "CAR Make"
     {
         field(1; "No."; Code[20])
         {
-            Caption = 'Make ID NO';
+            Caption = 'ID';
             DataClassification = CustomerContent;
 
         }
         field(2; " Make Name"; Text[250])
         {
             DataClassification = CustomerContent;
-            Caption = 'Make Name';
+            Caption = 'Name';
         }
     }
 

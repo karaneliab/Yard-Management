@@ -6,7 +6,7 @@ table 90102 "CAR BranchTable"
     {
         field(1; "No."; Code[20])
         {
-            Caption = 'No.';
+            Caption = 'ID';
             DataClassification = CustomerContent;
 
         }

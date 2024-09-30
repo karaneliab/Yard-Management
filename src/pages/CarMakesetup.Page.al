@@ -5,7 +5,7 @@ page 90107 "Car Make setup"
     PageType = List;
     SourceTable = "CAR Make";
     UsageCategory = Lists;
-    CardPageId = "Car Make Card";
+    // CardPageId = "Car Make Card";
 
     layout
     {

@@ -36,12 +36,12 @@ page 90112 "recieving List"
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                     
                 }
-                field("Buying Price"; Rec."Buying Price")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Buying Price.';
-                    DrillDown = false;
-                }
+                // field("Buying Price"; Rec."Buying Price")
+                // {
+                //     ApplicationArea = All;
+                //     ToolTip = 'Specifies the Buying Price.';
+                //     DrillDown = false;
+                // }
             }
         }
     }

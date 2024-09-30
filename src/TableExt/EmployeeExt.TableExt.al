@@ -16,6 +16,7 @@ tableextension 90101 "Employee Ext" extends Employee
             end;
         }
 
+
         field(56789; "KRA PIN"; Code[9])
         {
             DataClassification = CustomerContent;
@@ -58,6 +59,7 @@ tableextension 90101 "Employee Ext" extends Employee
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
                                                           Blocked = const(false));
         }
+        // ! Modifications needed
         field(83674; "Comision Paid"; Decimal)
         {
             Caption = 'Commission Paid';

@@ -9,14 +9,14 @@ table 90104 "CAR Model"
     {
         field(1; "ID"; Code[20])
         {
-            Caption = 'Model ID NO';
+            Caption = 'ID';
             DataClassification = ToBeClassified;
 
         }
         field(3; "Make"; Text[250])
         {
             DataClassification = CustomerContent;
-            Caption = 'Car Make';
+            Caption = 'Name';
             TableRelation = "CAR Make";
         }
         field(2; " Model Name"; Text[250])
