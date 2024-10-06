@@ -63,10 +63,37 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         {
             Caption = 'AcquisitionCost';
             Editable = false;
+       
+
             FieldClass = FlowField;
             // CalcFormula = sum("FA Ledger Entry".Amount where("FA No." = FIELD("No."),
             //                                                   "Depreciation Book Code" = FIELD("FA Location Code")));
             CalcFormula = lookup("Purch. Inv. Line"."Direct Unit Cost" WHERE("No." = field("No.")));
+        //  trigger OnValidate()
+        //     var
+        //         FADepreciationBook: Record "FA Depreciation Book";
+        //     begin
+        //         FADepreciationBook.Reset();
+        //         FADepreciationBook.SetRange("FA No.", "No.");
+        //                 if FADepreciationBook.FindFirst() then begin
+        //                     FADepreciationBook.CalcFields("Book Value");
+        //                     AcquisitionCost := FADepreciationBook."Book Value";
+
+        //     end;
+        //     end;
+            trigger OnLookup()
+             var
+                FADepreciationBook: Record "FA Depreciation Book";
+            begin
+                FADepreciationBook.Reset();
+                FADepreciationBook.SetRange("FA No.", "No.");
+                        if FADepreciationBook.FindFirst() then begin
+                            FADepreciationBook.CalcFields("Book Value");
+                            AcquisitionCost := FADepreciationBook."Book Value";
+
+            end;
+            end;
+
                                                                   
 
         }

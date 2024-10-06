@@ -3,6 +3,7 @@ namespace YardManagement.YardManagement;
 using Microsoft.HumanResources.Employee;
 using Microsoft.Sales.Document;
 using Microsoft.Sales.History;
+using Microsoft.Foundation.Company;
 
 report 90110 "Commission Report"
 {
@@ -43,26 +44,65 @@ report 90110 "Commission Report"
             {
 
             }
-            dataitem(CarLine; "Car Line")
+             column(Logo;CompanyInformation.Picture)
             {
-                DataItemLink = "Checked In By" = field("No.");
-                DataItemLinkReference = Employee;
-
-
-                RequestFilterFields = "Checked In By";
-                column(Commission_Amount; "Commission Amount")
-                {
-
-                }
+                
             }
-            dataitem("Sales Invoice";"Sales Line")
+            Column(Address;CompanyInformation.Address)
             {
-                // DataItemLink = "No." = field("Yard Branch");
-                DataItemLink = "Shortcut Dimension 1 Code" = field("Yard Branch");
-                // DataItemLinkReference = Employee;
-                column(Commission;Commission)
-                {
+                   IncludeCaption = true;
+            }
+              Column(Home_Page;CompanyInformation."Home Page")
+            {
+                 IncludeCaption = true;
+            }
+              Column(City;CompanyInformation.City)
+            {
+                  IncludeCaption = true;
+            }
+              Column(Phone_Number;CompanyInformation."Phone No.")
+            {
+                  IncludeCaption = true;
+            }
+            column(Mailing;CompanyInformation."E-Mail")
+            {
+                 IncludeCaption = true;
+            }
 
+            column(Postal_Code;CompanyInformation."Post Code")
+            {
+
+            }
+            // dataitem(CarLine; "Car Line")
+            // {
+            //     DataItemLink = "Checked In By" = field("No.");
+            //     DataItemLinkReference = Employee;
+
+
+            //     RequestFilterFields = "Checked In By";
+            //     column(Commission_Amount; "Commission Amount")
+            //     {
+
+            //     }
+            // }
+            // dataitem("Sales Invoice";"Sales Line")
+            // {
+            //     // DataItemLink = "No." = field("Yard Branch");
+            //     DataItemLink = "Shortcut Dimension 1 Code" = field("Yard Branch");
+            //     // DataItemLinkReference = Employee;
+            //     column(Commission;Commission)
+            //     {
+
+            //     }
+
+            // }
+            dataitem("Commission Ledger Entries";"Commission Ledger Entries")
+            {
+                DataItemLink = "Branch" = FIELD("Yard Branch");
+                DataItemLinkReference = Employee;
+                column(CommissionAmount;CommissionAmount)
+                {
+                    IncludeCaption = true;
                 }
 
             }
@@ -72,12 +112,21 @@ report 90110 "Commission Report"
     }
     labels
     {
-        Title = 'commision Report';
+        Title = 'Commision Report';
     }
 
 
     var
 
         Title: Label 'commission  Report';
+
+                CompanyInformation: Record "Company Information";
+        trigger OnPreReport()
+        begin
+            CompanyInformation.Get();   
+            CompanyInformation.CalcFields(CompanyInformation.Picture);
+
+
+        end;
 
 }

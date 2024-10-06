@@ -66,6 +66,7 @@ tableextension 90104 SalesLineExt extends "Sales Line"
                 FA: Record "Fixed Asset";
                 CommissionRate: Record "Commission Rate";
                 FADepreciationBook: Record "FA Depreciation Book";
+                cd90: Codeunit 90;
             begin
                 if Type = Type::"Fixed Asset" then begin
                     if FA.get("No.") then begin
@@ -73,6 +74,7 @@ tableextension 90104 SalesLineExt extends "Sales Line"
                             "CommissionPac" := CommissionRate."Commission Rate";
                         Make := FA."Car Make";
                         AcquisitionCost := FA.AcquisitionCost;
+                        Employee := FA."Responsible Employee";
                         FADepreciationBook.Reset();
                         FADepreciationBook.SetRange("FA No.", FA."No.");
                         if FADepreciationBook.FindFirst() then begin
@@ -103,7 +105,7 @@ tableextension 90104 SalesLineExt extends "Sales Line"
     begin
         // Fetch the acquisition cost from the Fixed Asset table based on the "No." field in Sales Line
         if FixedAsset.Get("No.") then begin
-            AcquisitionCost := FixedAsset.AcquisitionCost;
+            // AcquisitionCost := FixedAsset.AcquisitionCost;
 
             if CarMakeCommission.Get(Make) then begin
                 "CommissionPac" := CarMakeCommission."Commission Rate";
@@ -128,9 +130,29 @@ tableextension 90104 SalesLineExt extends "Sales Line"
     end;
 
     procedure CalculateCommissionAmount("CommissionPac": Decimal; Profit: Decimal): Decimal
+    
     begin
         // Calculate the commission amount based on the percentage and profit
+        Profit := "Unit Price" - AcquisitionCost;
         exit((Profit * ("CommissionPac" / 100)));
     end;
 
+}
+tableextension 90108 "SalesInvoiceLineExt" extends"Sales Invoice Line"
+{
+    fields
+    {
+        field(90100;Make;Text[250])
+        {
+            Caption = 'Make';
+        }
+        field(90101;CommissionPac;Decimal)
+        {
+            Caption = 'CommissionPac';
+        }
+        field(90102;"Acquisition cost";Decimal)
+        {
+            Caption = 'Acquisition cost';
+        }
+    }
 }

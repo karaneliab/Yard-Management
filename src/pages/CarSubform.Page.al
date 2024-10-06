@@ -24,10 +24,15 @@ page 90103 "Car Subform"
                 {
                     ToolTip = 'Specifies the value of the Yard Branch field.', Comment = '%';
                 }
-                // field("Document No."; Rec."Document No.")
-                // {
-                //     ToolTip = 'Specifies the value of the Document No field.', Comment = '%';
-                // }
+                field("Document No."; Rec."Document No.")
+                {
+                    Visible = false;
+                    ToolTip = 'Specifies the value of the Document No field.', Comment = '%';
+                }
+                field("Buying Price";Rec."Buying Price")
+                {
+                    ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
+                }
                 field("Checked In By"; Rec."Checked In By")
                 {
                     ToolTip = 'Specifies the value of the Checked in by. field.', Comment = '%';
@@ -112,6 +117,27 @@ page 90103 "Car Subform"
             }
         }
     }
+     actions
+        {
+           
+            area(Processing)
+            {
+               
+         
+                action(ExportCarDetails)
+                {
+                    Caption = 'Export Car Details';
+                    Promoted = true;
+                    PromotedCategory = Process;
+                    Image = Export;
+                    ApplicationArea = All;
+                    trigger OnAction()
+                    begin
+                        Xmlport.Run(90127,true,false);
+                        end;
+                }
+            }
+        }
 
   var
         IsInsuranceCompanyEditable: Boolean;
@@ -126,18 +152,7 @@ page 90103 "Car Subform"
         IsInsuranceCompanyEditable := Rec."Car Insured";
     end;
    
-            // action("Recalculate Commission")
-            // {
-            //     Caption = 'Recalculate Commission';
-            //     Image = Recalculate;
-            //     ApplicationArea = All;
-
-            //     trigger OnAction()
-            //     begin
-            //         Rec. CommisionCalculate();
-            //         Rec.Modify();
-            //     end;
-            // }
+       
         }
     
 

@@ -2,8 +2,9 @@ namespace YardManagement.YardManagement;
 
 using Microsoft.Sales.Document;
 using Microsoft.FixedAssets.Depreciation;
+using Microsoft.Sales.History;
 
-pageextension 90104 SalesLineExt extends 47
+pageextension 90104 SalesLineExt extends "Sales Invoice Subform"
 {
     layout
     {
@@ -43,16 +44,16 @@ pageextension 90104 SalesLineExt extends 47
         addlast("F&unctions")
         {
          action("Recalculate Commission")
-            {
-                Caption = 'Recalculate Commission';
-                Image = Recalculate;
-                ApplicationArea = All;
+           {
+            //    Caption = 'Recalculate Commission';
+            //    Image = Recalculate;
+            //    ApplicationArea = All;
 
-                trigger OnAction()
-                begin
-                    Rec. CommisionCalculate();
-                    Rec.Modify();
-                end;
+            //    trigger OnAction()
+            //    begin
+            //        Rec. CommisionCalculate();
+            //        Rec.Modify();
+            //    end;
             }
         }
     }
@@ -84,4 +85,46 @@ pageextension 90104 SalesLineExt extends 47
   
    
     
+}
+pageextension 90107 SalesLineList extends "Sales Lines"
+{
+    layout
+    {
+        addafter(Description)
+        {
+             field(Make; Rec.Make)
+            {
+                ToolTip = 'Specifies the Make of the car';
+            }
+            field("CommissionPac"; Rec."CommissionPac")
+            {
+                ToolTip = 'Specifies the Commission of the car';
+            }
+             field(Commission;Rec.Commission)
+            {
+                ToolTip = 'Specifies the total Commission of the car';
+            }
+        }
+    }
+}
+pageextension 90108 PostSalesLine extends "Posted Sales Invoice Lines"
+{
+    layout
+    {
+        addafter(Description)
+        {
+             field(Make; Rec.Make)
+            {
+                ToolTip = 'Specifies the Make of the car';
+            }
+            field("CommissionPac"; Rec."CommissionPac")
+            {
+                ToolTip = 'Specifies the Commission of the car';
+            }
+             field("Acquisition cost";Rec."Acquisition cost")
+            {
+                ToolTip = 'Specifies the total Commission of the car';
+            }
+        }
+    }
 }

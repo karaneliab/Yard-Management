@@ -2,10 +2,10 @@
 
 codeunit 90103 AgeCalculation
 {
-    trigger OnRun()
-    begin
-        // CalculateAge(Today, Employee."Birth Date"); // Example invocation can be done here
-    end;
+    // trigger OnRun()
+    // begin
+    //     // CalculateAge(Today, Employee."Birth Date"); // Example invocation can be done here
+    // end;
 
     var
         Employee: Record Employee;

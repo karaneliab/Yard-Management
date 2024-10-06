@@ -3,6 +3,7 @@ namespace YardManagement.YardManagement;
 using Microsoft.FixedAssets.FixedAsset;
 using Microsoft.Sales.Customer;
 using Microsoft.FixedAssets.Ledger;
+using Microsoft.Foundation.Company;
 
 report 90120 "Stock Report"
 {
@@ -23,11 +24,44 @@ report 90120 "Stock Report"
             column(FORMAT_TODAY_0_4_; Format(Today, 0, 4))
             {
             }
+             column(Logo;CompanyInformation.Picture)
+            {
+                
+            }
+            Column(Address;CompanyInformation.Address)
+            {
+                   IncludeCaption = true;
+            }
+              Column(Home_Page;CompanyInformation."Home Page")
+            {
+                 IncludeCaption = true;
+            }
+              Column(City;CompanyInformation.City)
+            {
+                  IncludeCaption = true;
+            }
+              Column(Phone_Number;CompanyInformation."Phone No.")
+            {
+                  IncludeCaption = true;
+            }
+            column(Mailing;CompanyInformation."E-Mail")
+            {
+                 IncludeCaption = true;
+            }
+
+            column(Postal_Code;CompanyInformation."Post Code")
+            {
+
+            }
              column(COMPANYNAME; COMPANYPROPERTY.DisplayName())
             {
             }
-            column(YearofManufacture; "Year of Manufacture")
+            column(YearofManufacture;Format("Year of Manufacture",0,4) )
             {
+            }
+            column(Country_Of_First_Registration;"Country Of First Registration")
+            {
+              
             }
             column(InsuaranceCompany; "Insurance Company")
             {
@@ -70,5 +104,14 @@ report 90120 "Stock Report"
     }
     var
         Title: Label 'Stock Report';
+        
+        CompanyInformation: Record "Company Information";
+        trigger OnPreReport()
+        begin
+            CompanyInformation.Get();   
+            CompanyInformation.CalcFields(CompanyInformation.Picture);
+
+
+        end;
 }
 

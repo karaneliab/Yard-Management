@@ -4,10 +4,16 @@ table 90111 "Car Line"
 
     fields
     {
+        field(19; "FA No"; code[20])
+        {
+            Caption = 'fixed asset no';
+            TableRelation = "Depreciation Book";
+
+        }
         field(1; "Document No."; code[20])
         {
             DataClassification = CustomerContent;
-            TableRelation = "Car Recieving Header";
+            // TableRelation = "Car Recieving Header";
             Caption = 'Document No';
 
         }
@@ -16,12 +22,14 @@ table 90111 "Car Line"
         {
             DataClassification = CustomerContent;
             Caption = 'RegNo';
+            NotBlank = false;
         }
         field(3; "Checked In By"; Text[250])
         {
             DataClassification = CustomerContent;
             Caption = 'Checked in by.';
             TableRelation = Employee where("Yard Branch" = field(YardBranch));
+
 
 
         }
@@ -32,6 +40,7 @@ table 90111 "Car Line"
             TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
                                                           Blocked = const(false));
             CaptionClass = '1,1,1';
+            NotBlank = false;
 
         }
         field(5; "Year of Make"; Date)
@@ -70,6 +79,7 @@ table 90111 "Car Line"
         field(10; "Insurance Company"; Text[40])
         {
             Caption = 'Insurance Company';
+            Editable = false;
             DataClassification = CustomerContent;
             // TableRelation = "Insuarance Company";
             TableRelation = Vendor where("Vendor Type" = CONST(Insurer));
@@ -114,14 +124,11 @@ table 90111 "Car Line"
         field(18; "Depreciation Book"; Code[20])
         {
             Caption = 'Depreciation Book';
+            Editable = false;
             // DataClassification = Normal;
             TableRelation = "Depreciation Book";
         }
-        field(19; "FA No"; code[20])
-        {
-            Caption = 'fixed asset no';
-            TableRelation = "Depreciation Book";
-        }
+
         field(20; "Tax Code"; Code[20])
         {
             Caption = 'Tax Code';
@@ -145,16 +152,8 @@ table 90111 "Car Line"
         {
             Caption = 'Car Insured';
             DataClassification = ToBeClassified;
-            // trigger OnValidate()
-            // begin
-            //     if "Car Insured" then begin
+            Editable = false;
 
-            //         "Insurance Company" := '';
-            //         "Year of Manufacture" := 0D;
-
-            //     end;
-
-            // end;
         }
 
         field(80505; "Year of Manufacture"; Date)
@@ -167,24 +166,102 @@ table 90111 "Car Line"
             Caption = 'Commission Amount';
             DataClassification = ToBeClassified;
         }
+        field(31; "Buying Price"; Decimal)
+        {
+            Caption = 'Buying Price';
+            DataClassification = ToBeClassified;
+            
+
+        }
 
     }
     keys
     {
-        key(ki; RegNo, "Document No.", YardBranch,"Chassis Number")
+        key(ki; RegNo, "Document No.", YardBranch, "Chassis Number")
         {
             Clustered = true;
         }
-        key(key2;"Chassis Number")
-        {
-            
-        }
+       
+       
     }
+
     trigger OnInsert()
+    VAR
+        FADepreciationBook: Record "Depreciation Book";
+        InsuranceCompany: Record Vendor;
+        VendorTypeEnum: Enum VendorType;
+        FaPostingGroup: Record "FA Posting Group";
+        FASubclass: Record "FA Subclass";
+        SubclassCounter: Integer;
+        ClassCounter: Integer;
+        FAClass: Record "FA Class";
+        CarReciv: Record "Car Recieving Header";
     begin
+
         TestStatus();
         // CommisionCalculate()
+        if FADepreciationBook.FindFirst() then begin
+            "Depreciation Book" := FADepreciationBook.Code;
+        end else begin
+
+            Error('No depreciation books found.');
+        end;
+        InsuranceCompany.SetRange("Vendor Type", VendorTypeEnum::Insurer);
+        if InsuranceCompany.FindFirst() then begin
+            "Insurance Company" := InsuranceCompany."No.";
+        end else begin
+            Error('No insurance companies found.');
+        end;
+        "Car Insured" := true;
+        InsuranceCompany.SetRange("Vendor Type", VendorTypeEnum::Supplier);
+        if InsuranceCompany.FindFirst() then begin
+            "Received From" := InsuranceCompany."No.";
+        end else begin
+            Error('No Vendor Found');
+        end;
+        if FaPostingGroup.FindFirst() then begin
+            "FA Posting Group" := FaPostingGroup.Code;
+        end else begin
+            Error('No FaPostinggroup found');
+        end;
+
+        if FAClass.FindSet() then begin
+            ClassCounter := 0;
+            repeat
+                ClassCounter += 1;
+                if ClassCounter = 1 then begin
+                    "FA Class Code" := FAClass.Code;
+                end;
+            until FAClass.Next() = 0;
+
+            if ClassCounter < 1 then
+                Error('Less than ONE FA Class records found.');
+        end else begin
+            Error('No FA Class records found.');
+        end;
+
+        FASubclass.SetRange("FA Class Code", "FA Class Code");
+        if FASubclass.FindSet() then begin
+            SubclassCounter := 0;
+            repeat
+                SubclassCounter += 1;
+                if SubclassCounter = 1 then begin
+                    "FA Subclass Code" := FASubclass.Code;
+                end;
+            until FASubclass.Next() = 0;
+
+            if SubclassCounter < 1 then
+                Error('Less than ONE FA Subclass records found for the selected FA Class Code.');
+        end else begin
+            Error('No FA Subclass records found for the selected FA Class Code.');
+        end;
+        // CarReciv.Reset();
+        // // CarLine.SetRange("Document No.", "No");
+        // if CarReciv.FindFirst() then begin
+            // "Buying Price" := CarReciv."Buying Price";
+        // end;
     end;
+
 
     trigger OnModify()
     begin
@@ -204,6 +281,7 @@ table 90111 "Car Line"
 
     end;
 
+
     var
         StatusCannotBeReleasedErr: Label 'status cannot be %1 .', comment = '%1 -  status field value';
         EmployeeStatusErr: Label 'The Employee Is.', Comment = '%1 - status field  value';
@@ -217,7 +295,7 @@ table 90111 "Car Line"
             if CarHeader.Status = CarHeader.Status::"Approved" then
                 Error(StatusCannotBeReleasedErr, CarHeader.Status);
     end;
-    
+
 
     local procedure EmployeeStatus()
     var

@@ -23,6 +23,7 @@ page 90106 "Car Model"
                 {
                     ToolTip = 'Specifies the value of the Car Make field.', Comment = '%';
                     ApplicationArea = All;
+                    
                 }
 
                 field(" Model Name"; Rec." Model Name")

@@ -1,6 +1,7 @@
 namespace YardManagement.YardManagement;
 
 using Microsoft.HumanResources.Employee;
+using Microsoft.Foundation.Company;
 using Microsoft.Foundation.Address;
 
 report 90100 "Employee Details"
@@ -18,8 +19,38 @@ report 90100 "Employee Details"
             column(FORMAT_TODAY_0_4_; Format(Today, 0, 4))
             {
             }
+
              column(COMPANYNAME; COMPANYPROPERTY.DisplayName())
             {
+            }
+            column(Logo;CompanyInformation.Picture)
+            {
+                
+            }
+            Column(Address;CompanyInformation.Address)
+            {
+                   IncludeCaption = true;
+            }
+              Column(Home_Page;CompanyInformation."Home Page")
+            {
+                 IncludeCaption = true;
+            }
+              Column(City;CompanyInformation.City)
+            {
+                  IncludeCaption = true;
+            }
+              Column(Phone_Number;CompanyInformation."Phone No.")
+            {
+                  IncludeCaption = true;
+            }
+            column(Mailing;CompanyInformation."E-Mail")
+            {
+                 IncludeCaption = true;
+            }
+
+            column(Postal_Code;CompanyInformation."Post Code")
+            {
+
             }
             column(CurrReport_PAGENOCaption; CurrReport_PAGENOCaptionLbl)
             {
@@ -31,7 +62,7 @@ report 90100 "Employee Details"
             column(FirstName; "First Name")
             {
             }
-            column(Date_of_Birth; "Birth Date")
+            column(Date_of_Birth; Format("Birth Date",0,4))
             {
             }
             column(ID_Number; "ID Number")
@@ -48,7 +79,7 @@ report 90100 "Employee Details"
             }
             column(Yard_Branch; "Yard Branch")
             {
-
+                    IncludeCaption = true;
             }
             column(EmployeeAddr_1_; EmployeeAddr[1])
             {
@@ -96,7 +127,7 @@ report 90100 "Employee Details"
     }
     labels
     {
-        Title = 'Our Employee Report';
+        Title = 'Employee Details';
     }
 
 
@@ -109,4 +140,13 @@ report 90100 "Employee Details"
         Counter: Integer;
         RecPerPageNum: Integer;
         GroupNo: Integer;
+        CompanyInformation: Record "Company Information";
+        trigger OnPreReport()
+        begin
+            CompanyInformation.Get();   
+            CompanyInformation.CalcFields(CompanyInformation.Picture);
+
+
+        end;
+
 }

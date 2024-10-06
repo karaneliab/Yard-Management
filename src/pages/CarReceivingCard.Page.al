@@ -1,6 +1,8 @@
 namespace Microsoft.Sales.Customer;
 using System.Automation;
+using Microsoft.Purchases.Document;
 using Microsoft.FixedAssets.FixedAsset;
+using YardManagement.YardManagement;
 page 90102 "Car Receiving Card"
 {
     ApplicationArea = All;
@@ -49,12 +51,18 @@ page 90102 "Car Receiving Card"
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
                 }
+                field("Buying Price"; Rec."Buying Price")
+                {
+                    ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
+                    Editable = false;
+                }
             }
             part(Lines; "Car Subform")
             {
                 ApplicationArea = All;
                 Caption = 'Lines';
                 SubPageLink = "Document No." = field("No");
+                UpdatePropagation = Both;
 
             }
         }
@@ -83,7 +91,7 @@ page 90102 "Car Receiving Card"
         area(processing)
         {
 
-           action("Po&st")
+            action("Po&st")
             {
                 Caption = 'P&ost';
                 Image = PostOrder;
@@ -93,30 +101,44 @@ page 90102 "Car Receiving Card"
                     RecRef: RecordRef;
                 begin
                     // Check if the status is 'Approved'
-                    if Rec.Status <> Rec.Status::Approved then begin
-                       
-                        if Confirm('The document is not approved. Do you want to send it for approval?', true) then begin
-                            RecRef.GetTable(Rec);
-                            if CustomWorkflowMgmt.CheckApprovalsWorkflowEnabled(RecRef) then
-                                CustomWorkflowMgmt.OnSendWorkflowForApproval(RecRef);
-                            Message('The document has been sent for approval.');
-                        end else
-                            Message('Posting cancelled.');
-                        exit; 
-                    end;
+                    // if Rec.Status <> Rec.Status::Approved then begin
 
-                    // If the status is 'Approved', proceed with posting
-                    if not Confirm('Do you want to post the car receipt?', true) then
-                        Message('Posting cancelled.')
-                    else begin
-                        Rec.PostCarDetails(Rec);
-                        Message('Car details posted successfully.');
-                        Page.Run(Page::"Fixed Asset List");
-                    end;
+                    //     if Confirm('The document is not approved. Do you want to send it for approval?', true) then begin
+                    //         RecRef.GetTable(Rec);
+                    //         if CustomWorkflowMgmt.CheckApprovalsWorkflowEnabled(RecRef) then
+                    //             CustomWorkflowMgmt.OnSendWorkflowForApproval(RecRef);
+                    //         Message('The document has been sent for approval.');
+                    //     end else
+                    //         Message('Posting cancelled.');
+                    //     exit; 
+                    // end;
+
+                    // // If the status is 'Approved', proceed with posting
+                    // if not Confirm('Do you want to post the car receipt?', true) then
+                    //     Message('Posting cancelled.')
+                    // else begin
+                    Rec.PostCarDetails(Rec);
+                    Message('Car details posted successfully.');
+                    Page.Run(Page::"Purchase Invoice");
+                end;
+                // end;
+            }
+            action(ImportCarDetails)
+            {
+                Caption = 'Import Car Details';
+                Promoted = true;
+                PromotedCategory = Process;
+                Image = Import;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    ImportCars: XmlPort "Import Car Details";
+                begin
+                    Clear(ImportCars);
+                    ImportCars.GetDocNo(Rec.No);
+                    ImportCars.Run();
                 end;
             }
-
-
 
             group("Request Approval")
             {

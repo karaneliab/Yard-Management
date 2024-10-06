@@ -232,3 +232,195 @@ table 90111 "Car Line"
     //             "Commission Amount" := CalculateCommissionAmount(CommissionRate,  Profit);
     //         end;
     // 
+
+  
+<!--   ##############################################################################################################
+     // local procedure CalculateJournalLineCommission(GenJournalLine: Record "Gen. Journal Line"): Decimal
+    // var
+    //     CarMakeCommission: Record "Commission Rate";
+    //     FixedAsset: Record "Fixed Asset";
+    //     Profit, CommissionAmount, AcquisitionCost : Decimal;
+    // begin
+
+    //     // if FixedAsset.Get(GenJournalLine."Account Type"::"Fixed Asset") then begin
+
+    //     //     AcquisitionCost := FixedAsset.AcquisitionCost;
+    //     if GenJournalLine."Account Type" = GenJournalLine."Account Type"::"Fixed Asset" then begin
+           
+    //         if FixedAsset.Get(GenJournalLine."Line No.") then begin
+
+
+    //             if CarMakeCommission.Get(FixedAsset."Car Make") then begin
+
+    //                 Profit := GenJournalLine.Amount - AcquisitionCost;
+
+    //                 // Ensure the profit is positive before calculating commission
+    //                 if Profit > 0 then
+    //                     CommissionAmount := Profit * (CarMakeCommission."Commission Rate" / 100)
+    //                 else
+    //                     CommissionAmount := 0;
+    //             end else begin
+    //                 // If no commission rate is found, set commission to 0
+    //                 CommissionAmount := 0;
+    //             end;
+    //         end else begin
+    //             // If the Fixed Asset record is not found, raise an error or return zero commission
+    //             Error('Fixed Asset not found for the given FA No.');
+    //         end;
+
+    //         // Return the calculated commission amount
+    //         exit(CommissionAmount);
+    //     end;
+    // end;
+
+    local procedure CalculateJournalLineCommission(GenJournalLine: Record "Gen. Journal Line"): Decimal
+var
+    CarMakeCommission: Record "Commission Rate";
+    FixedAsset: Record "Fixed Asset";
+    Profit, CommissionAmount, AcquisitionCost: Decimal;
+    CommissionPac: Decimal;
+begin
+    // Check if the Account Type is Fixed Asset
+    if GenJournalLine."Account Type" = GenJournalLine."Account Type"::"Fixed Asset" then begin
+        // Fetch the Fixed Asset using the FA No. from the journal line
+        if FixedAsset.Get(GenJournalLine."Line No.") then begin
+            AcquisitionCost := FixedAsset.AcquisitionCost;
+
+            // Retrieve the commission percentage based on the car make from the Fixed Asset record
+            if CarMakeCommission.Get(FixedAsset."Car Make") then begin
+                CommissionPac := CarMakeCommission."Commission Rate";
+                
+                // Calculate the profit (Journal Line Amount - Acquisition Cost)
+                Profit := GenJournalLine.Amount - AcquisitionCost;
+
+                // Ensure the profit is positive before calculating commission
+                if Profit > 0 then
+                    CommissionAmount := CalculateCommissionAmount(CommissionPac, Profit)
+                else
+                    CommissionAmount := 0;
+            end else begin
+                // If no commission rate is found, set commission to 0
+                CommissionAmount := 0;
+            end;
+        end else begin
+            Error('Fixed Asset not found for the given FA No.');
+        end;
+    end else begin
+        // If Account Type is not Fixed Asset, set commission to 0
+        CommissionAmount := 0;
+    end;
+
+    // Return the calculated commission amount
+    exit(CommissionAmount);
+end;
+    //  procedure CalculateCommissionAmount("CommissionPac": Decimal; Profit: Decimal): Decimal
+    // begin
+    //     // Calculate the commission amount based on the percentage and profit
+    //     exit((Profit * ("CommissionPac" / 100)));
+    // end;
+
+procedure CalculateCommissionAmount(CommissionPac: Decimal; Profit: Decimal): Decimal
+begin
+    // Calculate the commission amount based on the percentage and profit
+    exit(Profit * (CommissionPac / 100));
+end;
+###############################################!?################################################################33 -->
+// procedure RaisePurchaseInv(var Header: Record "Car Recieving Header"; VendorNo: Code[20])
+// var
+//     PurchaseHeader: Record "Purchase Header";
+//     PurchaseLine: Record "Purchase Line";
+//     CarLine: Record "Car Line";
+//     LineNo: Integer; 
+//     Vendor: Record Vendor;
+
+// begin
+    
+//     PurchaseHeader.Init();
+//     PurchaseHeader."Buy-from Vendor No." := VendorNo; 
+//     // PurchaseHeader."Buy-from Vendor Name" := Vendor.Name;
+//      if Vendor.Get(VendorNo) then
+//         PurchaseHeader."Buy-from Vendor Name" := Vendor.Name;
+//     PurchaseHeader."Posting Date" := Header."Date"; 
+//     PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Invoice; 
+
+    
+//     PurchaseHeader.Insert(true); 
+
+  
+//     CarLine.Reset();
+//     CarLine.SetRange("Document No.", Header.No);
+
+//     if CarLine.FindSet() then begin
+//         LineNo := 0; 
+//         repeat
+            
+//             PurchaseLine.Init();
+//             PurchaseLine."Document Type" := PurchaseLine."Document Type"::Invoice; 
+//             PurchaseLine.Type := PurchaseLine.Type::"Fixed Asset";
+//             PurchaseLine."Document No." := CarLine."FA No"; 
+            
+            
+//             LineNo += 10000; 
+//             PurchaseLine."Line No." := LineNo;
+
+//             PurchaseLine."No.":= CarLine."FA No"; 
+//             PurchaseLine."Quantity" := 1; 
+//             // PurchaseLine."Unit Cost" := CarLine."Acquisition Cost"; 
+//             PurchaseLine."Description" := CarLine."Chassis Number"; 
+           
+//             PurchaseLine.Insert(true);
+
+//         until CarLine.Next() = 0;
+//     end;
+// end;
+
+
+
+// procedure RaisePurchaseInv(var Header: Record "Car Recieving Header"; VendorNo: Code[20])
+// var
+//     PurchaseHeader: Record "Purchase Header";
+//     PurchaseLine: Record "Purchase Line";
+//     CarLine: Record "Car Line";
+//     LineNo: Integer; 
+//     Vendor: Record Vendor;
+//     FixedAsset: Record "Fixed Asset";
+// begin
+//     PurchaseHeader.Init();
+//     PurchaseHeader."Buy-from Vendor No." := VendorNo; 
+    
+//     if Vendor.Get(VendorNo) then
+//         PurchaseHeader.VALIDATE("Buy-from Vendor Name", Vendor.Name);
+    
+//     PurchaseHeader."Posting Date" := Header."Date"; 
+//     // PurchaseHeader."Vendor Invoice No." := VendorNo;
+//     PurchaseHeader.VALIDATE("Vendor Invoice No.",VendorNo);
+//     PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Invoice; 
+//     // PurchaseLine."No." := CarLine."FA No"; 
+//      // PurchaseLine."Document No." := PurchaseHeader."No.";
+//     PurchaseHeader.Insert(TRUE); 
+//     CarLine.Reset();
+//     CarLine.SetRange("Document No.", Header.No);
+
+//     if CarLine.FindSet() then begin
+//         LineNo := 0; 
+//         repeat
+//             PurchaseLine.Init();
+//             PurchaseLine."Document Type" := PurchaseLine."Document Type"::Invoice; 
+//             PurchaseLine.Type := PurchaseLine.Type::"Fixed Asset";
+//             // PurchaseLine."Document No." := CarLine."FA No"; 
+//             PurchaseLine."Document No." := PurchaseHeader."No.";
+//             LineNo += 10000; 
+//             PurchaseLine."Line No." := LineNo;
+
+//             // PurchaseLine."No." := CarLine."FA No"; 
+           
+//             PurchaseLine."Quantity" := 1; 
+            
+//             // PurchaseLine."Unit Cost" := CarLine."Acquisition Cost"; 
+//             // PurchaseLine."Description" := CarLine."Chassis Number"; 
+//             PurchaseLine.Validate(Description,CarLine."Chassis Number");
+//             PurchaseLine.Insert(TRUE);
+
+//         until CarLine.Next() = 0;
+//     end;
+// end;
