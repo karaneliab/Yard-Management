@@ -124,18 +124,7 @@ page 90103 "Car Subform"
             {
                
          
-                action(ExportCarDetails)
-                {
-                    Caption = 'Export Car Details';
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    Image = Export;
-                    ApplicationArea = All;
-                    trigger OnAction()
-                    begin
-                        Xmlport.Run(90127,true,false);
-                        end;
-                }
+              
             }
         }
 

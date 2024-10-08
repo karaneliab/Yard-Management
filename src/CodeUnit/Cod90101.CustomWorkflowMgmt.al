@@ -160,7 +160,7 @@ codeunit 90101 "Custom Workflow Mgmt"
 
     end;
 
-    //! subsibe to event predecessor
+    //! subscriibe to event predecessor
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Workflow Event Handling", 'OnAddWorkflowEventPredecessorsToLibrary', '', false, false)]
     local procedure OnAddWorkflowEventPredecessorsToLibrary(EventFunctionName: Code[128])

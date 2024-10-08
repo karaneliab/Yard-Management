@@ -41,6 +41,11 @@ pageextension 90101 "Fixed Assets" extends "Fixed Asset Card"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Year of Manufacture.', Comment = '%';
                 }
+                FIELD("Buying Price";Rec."Buying Price")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Speifies price';
+                }
                 field("Car Insured"; Rec."Car Insured")
                 {
                     ApplicationArea = All;

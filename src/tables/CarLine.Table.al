@@ -74,6 +74,7 @@ table 90111 "Car Line"
         {
             Caption = 'Chasis Number';
             DataClassification = CustomerContent;
+         
 
         }
         field(10; "Insurance Company"; Text[40])
@@ -170,7 +171,7 @@ table 90111 "Car Line"
         {
             Caption = 'Buying Price';
             DataClassification = ToBeClassified;
-            
+
 
         }
 
@@ -181,8 +182,8 @@ table 90111 "Car Line"
         {
             Clustered = true;
         }
-       
-       
+
+
     }
 
     trigger OnInsert()
@@ -196,6 +197,8 @@ table 90111 "Car Line"
         ClassCounter: Integer;
         FAClass: Record "FA Class";
         CarReciv: Record "Car Recieving Header";
+        Date: Date;
+        value: Integer;
     begin
 
         TestStatus();
@@ -258,8 +261,15 @@ table 90111 "Car Line"
         // CarReciv.Reset();
         // // CarLine.SetRange("Document No.", "No");
         // if CarReciv.FindFirst() then begin
-            // "Buying Price" := CarReciv."Buying Price";
+        // "Buying Price" := CarReciv."Buying Price";
         // end;
+        "Depreciation Starting Date" := Today;
+        "Depreciation Ending Date" := CalcDate('+1Y', "Depreciation Starting Date");
+         if "Chassis Number" <> xRec."Chassis Number" then begin
+                    // Check if the chassis number exists in the Car Line table (since ChassisNo is the primary key)
+                    if Exists("Chassis Number") then
+                        Error('A car with the provided chassis number %1 already exists in the Car Line table.', "Chassis Number");
+                end;
     end;
 
 
@@ -331,6 +341,7 @@ table 90111 "Car Line"
     // begin
     //     exit((BuyingPrice * CommissionRate) / 100);
     // end;
+
 
 
     var

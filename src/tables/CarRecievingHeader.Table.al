@@ -52,17 +52,6 @@ table 90110 "Car Recieving Header"
 
 
         }
-        // field(10; "Buying Price"; Decimal)
-        // {
-        //     Caption = 'Buying Price';
-        //     DataClassification = CustomerContent;
-        //     // FieldClass = FlowField;
-        //     // // CalcFormula = lookup(Microsoft.Sales.Document."Sales Line"."Unit Price" where("No." = field("Customer Nos.")));
-        //     // // CalcFormula = lookup(Microsoft.Purchases.Document."Purchase Line".Amount where ("No." = field("Customer Nos.")));
-        //     // CalcFormula = Sum("Purchase Line"."Direct Unit Cost" where ("No." = field("FA No.")));
-
-
-        // }
         field(107; "No. Series"; Code[20])
         {
             Caption = 'No. Series';
@@ -113,16 +102,7 @@ table 90110 "Car Recieving Header"
             FieldClass = FlowField;
             // CalcFormula = lookup("Car Line"."Buying Price" where("Document No." =FIELD(No)));
             CalcFormula = sum("Car Line"."Buying Price" where("Document No." = FIELD(No)));
-            // trigger OnLookup()
-            // var 
-            //  CarLine: Record "Car Line";
-            //  begin
-            //     CarLine.Reset();
-            //     CarLine.SetRange("Document No.", "No");
-            //     if CarLine.FindFirst() then begin
-            //         "Buying Price" := CarLine."Buying Price";
-            //     end;
-            //  end;
+
 
         }
     }
@@ -143,23 +123,7 @@ table 90110 "Car Recieving Header"
         "Last Released Date" := CurrentDateTime;
     end;
 
-    // local procedure TestNoSeries()
-    // var
-    //     CarReceived: Record "Car Recieving Header";
-    //     IsHandled: Boolean;
-    // begin
-    //     IsHandled := false;
-    //     OnBeforeTestNoSeries(Rec, xRec, IsHandled);
-    //     if IsHandled then
-    //         exit;
 
-    //     if "No" <> xRec."No" then
-    //         if not CarReceived.Get(Rec."No") then begin
-    //             SalesSetup.Get();
-    //             NoSeries.TestManual(SalesSetup."Customer Nos.");
-    //             "No. Series" := '';
-    //         end;
-    // end;
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeTestNoSeries(var Customer: Record "Car Recieving Header"; xCustomer: Record "Car Recieving Header"; var IsHandled: Boolean)
@@ -172,14 +136,7 @@ table 90110 "Car Recieving Header"
         SalesSetup: Record "Sales & Receivables Setup";
         NoSeries: Codeunit Microsoft.Foundation.NoSeries."No. Series";
 
-    // trigger OnInsert()
-    // begin
-    //     SalesSetup.Get();
-    //     SalesSetup.TestField("Customer Nos.");
-    //     IF No = '' then
-    //         No := NoSeries.GetNextNo(SalesSetup."Customer Nos.")
 
-    // end;
     trigger OnInsert()
     begin
         if "No" = '' then
@@ -325,10 +282,14 @@ table 90110 "Car Recieving Header"
                     Error('Enter the checked-in by field');
                 if CarLine."FA Class Code" = '' then
                     Error('Enter the FA class code to get the correct subclass with default posting group');
+                if CarLine.Get(CarLine."Chassis Number") then
+                    Error('The chassis number %1 already exists in the Car Line table.', CarLine."Chassis Number");
+
 
 
                 NextFANo := NoSeriesMgt.GetNextNo(FASetup."Fixed Asset Nos.", Header."Date", true);
                 CarLine."FA No" := NextFANo;
+
                 FixedAsset.Init();
                 FixedAsset."No." := CarLine."FA No";
                 FixedAsset.ChassisNo := CarLine."Chassis Number";
@@ -336,6 +297,7 @@ table 90110 "Car Recieving Header"
                 FixedAsset."Description" := CarLine."Chassis Number";
                 FixedAsset."Model" := CarLine."Car Model";
                 FixedAsset."RegNo" := CarLine.RegNo;
+                FixedAsset."Buying Price" := CarLine."Buying Price";
                 FixedAsset."Responsible Employee" := CarLine."Checked In By";
                 FixedAsset."Year of Manufacture" := CarLine."Year of Make";
                 FixedAsset."Country Of First Registration" := CarLine."Country Of Registration";
@@ -345,6 +307,7 @@ table 90110 "Car Recieving Header"
                 FixedAsset."Vendor No." := CarLine."Received From";
                 FixedAsset."FA Subclass Code" := CarLine."FA Subclass Code";
                 FixedAsset.Validate("Car Insured", CarLine."Car Insured");
+
 
 
                 FixedAsset.Insert();
@@ -362,126 +325,94 @@ table 90110 "Car Recieving Header"
 
             until CarLine.Next() = 0;
         end;
-        // RaisePurchaseInv(Header, FixedAsset."Vendor No.");
+
+
+        RaisePurchaseInv(Header, FixedAsset."Vendor No.");
     end;
 
 
 
 
-    // procedure RaisePurchaseInv(var Header: Record "Car Recieving Header"; VendorNo: Code[20])
-    // var
-    //     PurchaseHeader: Record "Purchase Header";
-    //     PurchaseLine: Record "Purchase Line";
-    //     CarLine: Record "Car Line";
-    //     LineNo: Integer; 
-    //     Vendor: Record Vendor;
+    procedure RaisePurchaseInv(var Header: Record "Car Recieving Header"; VendorNo: Code[20])
+    var
+        PurchaseHeader: Record "Purchase Header";
+        PurchaseLine: Record "Purchase Line";
+        CarLine: Record "Car Line";
+        LineNo: Integer;
+        Vendor: Record Vendor;
+        DirectUnitCost: Decimal;
+        DirectUnitCostText: Text;
 
-    // begin
-
-    //     PurchaseHeader.Init();
-    //     PurchaseHeader."Buy-from Vendor No." := VendorNo; 
-    //     PurchaseHeader.Validate("Buy-from Vendor No.");
-    //     // PurchaseHeader."Buy-from Vendor Name" := Vendor.Name;
-    //     PurchaseHeader."Posting Date" := Header."Date"; 
-    //     PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Invoice; 
-    //      PurchaseHeader.VALIDATE("Vendor Invoice No.",Header.No);
-
-    //     PurchaseHeader.Insert(true); 
+    begin
 
 
-    //     CarLine.Reset();
-    //     CarLine.SetRange("Document No.", Header.No);
+        PurchaseHeader.Init();
+        PurchaseHeader."Buy-from Vendor No." := VendorNo;
 
-    //     if CarLine.FindSet() then begin
-    //         LineNo := 0; 
-    //         repeat
+        // PurchaseHeader."Buy-from Vendor Name" := Vendor.Name;
+        PurchaseHeader."Posting Date" := Header."Date";
+        PurchaseHeader."Document Date" := Header."Date";
+        PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Invoice;
 
-    //             PurchaseLine.Init();
-    //             PurchaseLine."Document Type" := PurchaseLine."Document Type"::Invoice; 
-    //             PurchaseLine.Type := PurchaseLine.Type::"Fixed Asset";
-    //             // PurchaseLine."Document No." :=PurchaseHeader."No."; 
-    //             PurchaseLine.Validate("Document No.",PurchaseHeader."No.");
+        // if PurchaseHeader."No." = '' then begin
+        //     NoSeriesMgt.InitSeries(PurchSetup."Invoice Nos.", '', PurchaseHeader."Posting Date", PurchaseHeader."No.", PurchaseHeader."No. Series");
+        // end;
+        //  end;
+        PurchaseHeader."Currency Code" := 'USD';
+        if PurchaseHeader.Insert(true) then begin
+            PurchaseHeader.Validate("Buy-from Vendor No.");
+            PurchaseHeader.Validate("Currency Code");
+            PurchaseHeader.VALIDATE("Vendor Invoice No.", Header.No);
+            PurchaseHeader.Modify();
+        end;
 
-    //             //add posting group
+        CarLine.Reset();
+        CarLine.SetRange("Document No.", Header.No);
+        if CarLine.FindSet() then begin
+            LineNo := 0;
+            repeat
+                Message(PurchaseHeader."No.");
+
+                PurchaseLine.Init();
+                PurchaseLine."Document Type" := PurchaseLine."Document Type"::Invoice;
+                PurchaseLine.Type := PurchaseLine.Type::"Fixed Asset";
+                PurchaseLine."Document No." := PurchaseHeader."No.";
+                PurchaseLine.Validate("Document No.", PurchaseHeader."No.");
+
+                //add posting group
+                PurchaseLine."Posting Group" := CarLine."FA Posting Group";
 
 
+                LineNo += 1200;
+                PurchaseLine."Line No." := LineNo;
 
-    //             LineNo += 120; 
-    //             PurchaseLine."Line No." := LineNo;
+                PurchaseLine."No." := CarLine."FA No";
+                // PurchaseLine."Document No." := "FA No.";
+                // PurchaseLine.Validate("No.",CarLine."FA No");
+                PurchaseLine."Quantity" := 1;
+                PurchaseLine."Direct Unit Cost" := CarLine."Buying Price";
+                PurchaseLine."Description" := CarLine."Chassis Number";
+                PurchaseLine."Shortcut Dimension 1 Code" := CarLine.YardBranch;
+                // DirectUnitCost := PurchaseLine."Direct Unit Cost"; 
+                // DirectUnitCostText := Format(DirectUnitCost);
 
-    //             PurchaseLine."No.":= CarLine."FA No"; 
-    //             // PurchaseLine.Validate("No.",CarLine."FA No");
-    //             PurchaseLine."Quantity" := 1; 
-    //             PurchaseLine."Unit Cost" := CarLine."Buying Price"; 
-    //             PurchaseLine."Description" := CarLine."Chassis Number"; 
+                if PurchaseLine.Insert(true) then begin
+                    PurchaseLine.Validate("No.");
+                    PurchaseLine.Validate("Direct Unit Cost", CarLine."Buying Price");
+                    PurchaseLine.Validate("Shortcut Dimension 1 Code", CarLine.YardBranch);
+                    // PurchaseLine.Modify();
+
+                    PurchaseLine.Modify(true);
+
+                end else
+                    Error('Error');
+            // Message(DirectUnitCostText)
 
 
-    //           if   PurchaseLine.Insert(true) then
-    //           begin
-    //             PurchaseLine.Validate("No.");
-    //             // PurchaseLine.Modify();
+            until CarLine.Next() = 0;
 
-    //             PurchaseLine.Modify(true);
-    //           end else 
-    //             Error('eer')
-
-    //         until CarLine.Next() = 0;
-
-    //     end;
-    // end;
-
-   procedure RaisePurchaseInv(var Header: Record "Car Recieving Header"; VendorNo: Code[20])
-var
-    PurchaseHeader: Record "Purchase Header";
-    PurchaseLine: Record "Purchase Line";
-    CarLine: Record "Car Line";
-    LineNo: Integer;
-begin
-    // Initialize and Insert Purchase Header
-    PurchaseHeader.Init();
-    PurchaseHeader."Buy-from Vendor No." := VendorNo; 
-    PurchaseHeader.Validate("Buy-from Vendor No.");
-    PurchaseHeader."Posting Date" := Header."Date"; 
-    PurchaseHeader."Document Type" := PurchaseHeader."Document Type"::Invoice;
-    PurchaseHeader.VALIDATE("Vendor Invoice No.", Header.No);
-
-    // Insert the Purchase Header and ensure the "No." is correctly assigned
-    PurchaseHeader.Insert(true); 
-    
-    // Manually assign "Document No." after insertion
-    if PurchaseHeader."No." = '' then
-        Error('Purchase Header No. is missing. Check No. Series.');
-
-    // Now, we need to populate the Purchase Line(s)
-    CarLine.Reset();
-    CarLine.SetRange("Document No.", Header.No);
-
-    if CarLine.FindSet() then begin
-        LineNo := 0; 
-        repeat
-            // Initialize Purchase Line
-            PurchaseLine.Init();
-            PurchaseLine."Document Type" := PurchaseLine."Document Type"::Invoice;
-
-            // **Directly set the Document No.** from Purchase Header No. to avoid validation errors
-            PurchaseLine."Document No." := PurchaseHeader."No."; 
-
-            // Ensure Document No. is correctly assigned
-            if PurchaseLine."Document No." = '' then
-                Error('Document No. is still empty in Purchase Line.');
-
-            // Set LineNo and other details from CarLine
-            LineNo += 10000; // Increment LineNo appropriately
-            PurchaseLine."Line No." := LineNo;
-            PurchaseLine.Type := PurchaseLine.Type::"Fixed Asset";
-            PurchaseLine."No." := CarLine."FA No"; // Set the Fixed Asset No.
-            PurchaseLine."Quantity" := 1;
-            PurchaseLine."Unit Cost" := CarLine."Buying Price";
-            PurchaseLine."Description" := CarLine."Chassis Number";
-
-            // Insert the Purchase Line after ensuring all required fields are set
-            PurchaseLine.Insert(true);
-        until CarLine.Next() = 0;
+        end;
     end;
-end;
+
+
 }

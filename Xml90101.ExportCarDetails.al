@@ -4,10 +4,10 @@ xmlport 90127 "Export Car Details"
 {
     Caption = 'Export Car Details';
     Direction = Export;
-    TextEncoding = UTF8;
     Format=VariableText;
-    UseRequestPage = false;
+    UseRequestPage = true;
     TableSeparator = '';
+    
 
     schema
     {

@@ -424,3 +424,50 @@ end;
 //         until CarLine.Next() = 0;
 //     end;
 // end;
+
+ action("Po&st")
+            {
+                Caption = 'P&ost';
+                Image = PostOrder;
+                trigger OnAction()
+                var
+                    CarLine: Record "Car Line";
+                    PurchaseHeader: Record "Purchase Header";
+                    PurchaseInvoiceNo: Code[20];
+                    VendorNo: Code[20];
+                begin
+                    // Check if the document has been approved
+                    if Rec.Status <> Rec.Status::Approved then begin
+                        // Inform the user that approval is needed
+                        Message('The document is not approved yet. Please send it for approval using the "Send Approval Request" action and wait for approval.');
+                        exit; // Exit the action since we can't post an unapproved document
+                    end;
+
+                    // Confirm the user's intention to post
+                    if Confirm('The document is approved. Do you want to post the car receipt?', true) then begin
+                        // Proceed with posting the car details
+                        Rec.PostCarDetails(Rec);
+                        Message('Car details posted successfully.');
+
+                        // Find the related car line record(s)
+                        CarLine.SetRange("Document No.", Rec.No);
+                        if CarLine.FindFirst() then begin
+                            VendorNo := CarLine."Received From";
+
+                            // Find the latest purchase invoice for the vendor
+                            PurchaseHeader.SetRange("Buy-from Vendor No.", VendorNo);
+                            PurchaseHeader.SetRange("Posting Date", Rec."Date");
+
+                            if PurchaseHeader.FindLast() then begin
+                                PurchaseInvoiceNo := PurchaseHeader."No.";
+
+                                // Open the purchase invoice page
+                                Page.Run(Page::"Purchase Invoice", PurchaseHeader);
+                            end else
+                                Message('No purchase invoice was found for vendor: %1', VendorNo);
+                        end else
+                            Message('No car line record found for the current receiving header.');
+                    end else
+                        Message('Posting cancelled.');
+                end;
+            }

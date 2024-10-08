@@ -52,6 +52,10 @@ xmlport 90126 "Import Car Details"
                 {
 
                 }
+                fieldelement(Origin;CarLine."Country Of Registration")
+                {
+                    
+                }
                 // fieldelement(DocumentNo;CarLine."Document No.")
                 // {}
 
@@ -67,10 +71,10 @@ xmlport 90126 "Import Car Details"
                 begin
                     // CarLine."Document No." := DocumentNo;
                     if CarLine.Get(CarLine.RegNo, DocumentNo, CarLine.YardBranch, CarLine."Chassis Number") then begin
-                        // If the record exists, decide what to do. For example, you can skip inserting:
-                        CurrXMLPort.Skip();// Skip insertion if record exists
+          
+                        CurrXMLPort.Skip();
                     end else begin
-                        CarLine."Document No." := DocumentNo; // Set Document No.
+                        CarLine."Document No." := DocumentNo; 
                     end;
 
                 end;

@@ -29,10 +29,26 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
             Caption = 'Registration Number';
             DataClassification = CustomerContent;
         }
-        field(80504; ChassisNo; Text[40])
+        field(80504; ChassisNo; Code[40])
         {
             Caption = 'Chasis Number';
             DataClassification = ToBeClassified;
+            trigger OnValidate()
+            var
+                CarLineRec: Record "Car Line"; 
+                FixedAssetRec: Record "Fixed Asset";
+            begin
+                if ChassisNo <> xRec.ChassisNo then begin
+                   
+                    if CarLineRec.Get(CarLineRec."Chassis Number") then
+                        Error('A car with the provided chassis number %1 already exists in the Car Line table.', CarLineRec."Chassis Number");
+
+                    // Check if the chassis number exists in the Fixed Asset table
+                    FixedAssetRec.SetRange(ChassisNo,CarLineRec."Chassis Number");
+                    if FixedAssetRec.FindFirst() then
+                        Error('A car with the provided chassis number %1 already exists in the Fixed Asset table.', ChassisNo);
+                end;
+            end;
         }
         field(80505; "Year of Manufacture"; Date)
         {
@@ -59,42 +75,50 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
 
             end;
         }
-        field(50000;AcquisitionCost;Decimal)
+        field(51000; "Buying Price"; Decimal)
+        {
+            // caption = 'Price';
+            Caption = 'Buying Price';
+            FieldClass = FlowField;
+            // CalcFormula = lookup("Car Line"."Buying Price" where("Document No." =FIELD(No)));
+            CalcFormula = sum("Car Line"."Buying Price" where("FA No" = FIELD("No.")));
+        }
+        field(50000; AcquisitionCost; Decimal)
         {
             Caption = 'AcquisitionCost';
             Editable = false;
-       
+
 
             FieldClass = FlowField;
             // CalcFormula = sum("FA Ledger Entry".Amount where("FA No." = FIELD("No."),
             //                                                   "Depreciation Book Code" = FIELD("FA Location Code")));
             CalcFormula = lookup("Purch. Inv. Line"."Direct Unit Cost" WHERE("No." = field("No.")));
-        //  trigger OnValidate()
-        //     var
-        //         FADepreciationBook: Record "FA Depreciation Book";
-        //     begin
-        //         FADepreciationBook.Reset();
-        //         FADepreciationBook.SetRange("FA No.", "No.");
-        //                 if FADepreciationBook.FindFirst() then begin
-        //                     FADepreciationBook.CalcFields("Book Value");
-        //                     AcquisitionCost := FADepreciationBook."Book Value";
+            //  trigger OnValidate()
+            //     var
+            //         FADepreciationBook: Record "FA Depreciation Book";
+            //     begin
+            //         FADepreciationBook.Reset();
+            //         FADepreciationBook.SetRange("FA No.", "No.");
+            //                 if FADepreciationBook.FindFirst() then begin
+            //                     FADepreciationBook.CalcFields("Book Value");
+            //                     AcquisitionCost := FADepreciationBook."Book Value";
 
-        //     end;
-        //     end;
+            //     end;
+            //     end;
             trigger OnLookup()
-             var
+            var
                 FADepreciationBook: Record "FA Depreciation Book";
             begin
                 FADepreciationBook.Reset();
                 FADepreciationBook.SetRange("FA No.", "No.");
-                        if FADepreciationBook.FindFirst() then begin
-                            FADepreciationBook.CalcFields("Book Value");
-                            AcquisitionCost := FADepreciationBook."Book Value";
+                if FADepreciationBook.FindFirst() then begin
+                    FADepreciationBook.CalcFields("Book Value");
+                    AcquisitionCost := FADepreciationBook."Book Value";
 
-            end;
+                end;
             end;
 
-                                                                  
+
 
         }
         field(50001; "Front Pic"; Media)
@@ -131,4 +155,5 @@ tableextension 90100 "Fixed Asset Ext" extends "Fixed Asset"
         }
 
     }
+  
 }

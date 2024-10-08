@@ -40,7 +40,7 @@ page 90102 "Car Receiving Card"
                 {
                     ToolTip = 'Specifies the value of the Last Released Date field.', Comment = '%';
                 }
-                // field("Buying Price"; Rec."Buying Price")
+                // ?field("Buying Price"; Rec."Buying Price")
                 // {
                 //     ToolTip = 'Specifies the value of the Buying Price field.', Comment = '%';
 
@@ -91,38 +91,94 @@ page 90102 "Car Receiving Card"
         area(processing)
         {
 
+            // action("Po&st")
+            // {
+            //     Caption = 'P&ost';
+            //     Image = PostOrder;
+            //     trigger OnAction()
+            //     var
+            //         CustomWorkflowMgmt: Codeunit "Custom Workflow Mgmt";
+            //         RecRef: RecordRef;
+            //         PurchaseHeader: Record "Purchase Header";
+            //     begin
+            //         // Check if the status is 'Approved'/
+            //         if Rec.Status <> Rec.Status::Approved then begin
+
+            //             if Confirm('The document is not approved. Do you want to send it for approval?', true, false) then begin
+            //                 RecRef.GetTable(Rec);
+            //                 if CustomWorkflowMgmt.CheckApprovalsWorkflowEnabled(RecRef) then
+            //                     CustomWorkflowMgmt.OnSendWorkflowForApproval(RecRef);
+            //                 Message('The document has been sent for approval.');
+            //             end else
+            //                 Message('Posting cancelled.');
+            //             // exit;
+            //         end;
+
+            //         // If the status is 'Approved', proceed with posting
+            //         if not Confirm('Do you want to post the car receipt?', true, false) then
+            //             Message('Posting cancelled.')
+            //         else begin
+            //             Rec.PostCarDetails(Rec);
+            //             Message('Car details posted successfully.');
+            //             // Page.Run(Page::"Purchase Invoice",PurchaseHeader);
+            //             Page.Run(Page::"Fixed Asset Card");
+            //         end;
+            //     end;
+            // }
             action("Po&st")
             {
                 Caption = 'P&ost';
                 Image = PostOrder;
                 trigger OnAction()
                 var
+                    CarLine: Record "Car Line";
+                    PurchaseHeader: Record "Purchase Header";
+                    PurchaseInvoiceNo: Code[20];
                     CustomWorkflowMgmt: Codeunit "Custom Workflow Mgmt";
                     RecRef: RecordRef;
+                    VendorNo: Code[20];
                 begin
-                    // Check if the status is 'Approved'
                     // if Rec.Status <> Rec.Status::Approved then begin
 
-                    //     if Confirm('The document is not approved. Do you want to send it for approval?', true) then begin
+                    //     if Confirm('The document is not approved. Do you want to send it for approval?', true, false) then begin
                     //         RecRef.GetTable(Rec);
                     //         if CustomWorkflowMgmt.CheckApprovalsWorkflowEnabled(RecRef) then
                     //             CustomWorkflowMgmt.OnSendWorkflowForApproval(RecRef);
                     //         Message('The document has been sent for approval.');
                     //     end else
                     //         Message('Posting cancelled.');
-                    //     exit; 
+                    //     exit;
                     // end;
+                    if not Confirm('Do you want to post the car receipt?', true) then
+                        Message('Posting cancelled.')
+                    else begin
 
-                    // // If the status is 'Approved', proceed with posting
-                    // if not Confirm('Do you want to post the car receipt?', true) then
-                    //     Message('Posting cancelled.')
-                    // else begin
-                    Rec.PostCarDetails(Rec);
-                    Message('Car details posted successfully.');
-                    Page.Run(Page::"Purchase Invoice");
+                        Rec.PostCarDetails(Rec);
+                        Message('Car details posted successfully.');
+
+
+                        CarLine.SetRange("Document No.", Rec.No);
+                        if CarLine.FindFirst() then begin
+                            VendorNo := CarLine."Received From";
+
+                            // Find the latest purchase invoice for the vendor
+                            PurchaseHeader.SetRange("Buy-from Vendor No.", VendorNo);
+                            PurchaseHeader.SetRange("Posting Date", Rec."Date");
+
+                            if PurchaseHeader.FindLast() then begin
+                                PurchaseInvoiceNo := PurchaseHeader."No.";
+
+
+                                Page.Run(Page::"Purchase Invoice", PurchaseHeader);
+                            end else
+                                Message('No purchase invoice was found for vendor: %1', VendorNo);
+                        end else
+                            Message('No car line record found for the current receiving header.');
+                    end;
                 end;
-                // end;
             }
+
+
             action(ImportCarDetails)
             {
                 Caption = 'Import Car Details';
@@ -137,6 +193,21 @@ page 90102 "Car Receiving Card"
                     Clear(ImportCars);
                     ImportCars.GetDocNo(Rec.No);
                     ImportCars.Run();
+                end;
+            }
+            action(ExportCarDetails)
+            {
+                Caption = 'Export Car Details';
+                Promoted = true;
+                PromotedCategory = Process;
+                Image = Export;
+                ApplicationArea = All;
+                trigger OnAction()
+                var
+                    ExportCars: XmlPort "Export Car Details";
+                begin
+                    Clear(ExportCars);
+                    ExportCars.Run();
                 end;
             }
 
